@@ -1,0 +1,26 @@
+{
+  "canisters": {
+    "wayfare_backend": {
+      "main": "src/wayfare_backend/main.mo",
+      "type": "motoko"
+    },
+    "wayfare_frontend": {
+      "dependencies": [
+        "wayfare_backend"
+      ],
+      "source": [
+        "src/wayfare_frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "wayfare_frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
