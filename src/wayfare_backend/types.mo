@@ -1,6 +1,7 @@
+// types.mo
 import Text "mo:base/Text";
 
-module Types{
+module {
     public type User = {
         name: Text;
         var accountBalance: Int;
@@ -10,10 +11,9 @@ module Types{
         tickets: ?[Text];
         password: Text;
         var isLoggedIn: Bool;
-
     };
 
-    type Ticket = {
+    public type Ticket = {
         code: Text;
         seatNumber: Nat;
         providerId: Text;
@@ -23,15 +23,15 @@ module Types{
         route: Text;
         passengerName: Text;
         purchaseTime: Text;
-        etd: Text;               //Estimated time of depature
-        eta: Text;               //Estimated time of arrival
+        etd: Text;
+        eta: Text;
     };
 
-    type Provider = {
+    public type Provider = {
         name: Text;
         id: Text;
         info: Text;
         routes: [Text];
         prices: [Nat];
-    }
-};
+    };
+}
