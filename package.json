@@ -14,5 +14,9 @@
   "type": "module",
   "workspaces": [
     "src/wayfare_frontend"
-  ]
+  ],
+  "dependencies": {
+    "react-router-dom": "^6.24.1",
+    "react-toastify": "^10.0.5"
+  }
 }

@@ -5,6 +5,7 @@ module {
     public type User = {
         name: Text;
         var accountBalance: Int;
+        
         email: Text;
         phone: ?Text;
         paymentMethods: ?[Text];

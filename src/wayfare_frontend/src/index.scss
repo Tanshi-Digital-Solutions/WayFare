@@ -1,37 +1,135 @@
-body {
-  font-family: sans-serif;
-  font-size: 1.5rem;
-}
-
-img {
-  max-width: 50vw;
-  max-height: 25vw;
-  display: block;
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
   margin: auto;
+  width: 600px;
+  background: #fff;
+  padding-bottom: 30px;
 }
 
-form {
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  margin-top: 30px;
+}
+
+.text {
+  color: #9d004f;
+  font-size: 48px;
+  font-weight: 700;
+}
+
+.underline {
+  width: 61px;
+  height: 6px;
+  background: #92045c;
+  border-radius: 9px;
+}
+
+.inputs {
+  margin-top: 55px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  align-items: center;
+}
+
+.input {
+  display: flex;
+  align-items: center;
+  width: 480px;
+  height: 80px;
+  background: #eaeaea;
+  border-radius: 6px;
+}
+
+.input img {
+  margin: 0 30px;
+}
+
+.input input {
+  height: 50px;
+  width: 400px;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #797979;
+  font-size: 19px;
+}
+
+.forgot-password {
+  margin-top: 27px;
+  color: #50032d;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.submit-container {
+  display: flex;
+  flex-direction: column; /* Ensure buttons are stacked vertically */
+  align-items: center;
+  gap: 20px; /* Adjust this value for the desired space between the buttons */
+  margin-top: 62px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 30px; /* Adjust this value for the desired space between the buttons horizontally */
+}
+
+.submit {
   display: flex;
   justify-content: center;
-  gap: 0.5em;
-  flex-flow: row wrap;
-  max-width: 40vw;
-  margin: auto;
-  align-items: baseline;
+  align-items: center;
+  width: 220px;
+  height: 59px;
+  color: #fff;
+  background: #4c00b4;
+  border-radius: 50px;
+  font-size: 19px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none; /* Remove border */
 }
 
-button[type="submit"] {
-  padding: 5px 20px;
-  margin: 10px auto;
-  float: right;
+.submit.gray {
+  background: #eaeaea;
+  color: #676767;
+  border: none; /* Remove border */
 }
 
-#greeting {
-  margin: 10px auto;
-  padding: 10px 60px;
-  border: 1px solid #222;
+.message {
+  margin-top: 20px;
+  color: red;
 }
 
-#greeting:empty {
-  display: none;
+/* index.scss */
+.notification {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background-color: #333;
+  color: #fff;
+  padding: 15px;
+  border-radius: 5px;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.notification.show {
+  opacity: 1;
+}
+
+.notification.success {
+  background-color: #4CAF50; /* Green */
+}
+
+.notification.error {
+  background-color: #F44336; /* Red */
 }
