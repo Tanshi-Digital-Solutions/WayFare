@@ -1,18 +1,19 @@
 import React from 'react';
 import { User, CreditCard, Map, LogOut, Home, Book, Clock, Settings, HelpCircle, BarChart } from 'lucide-react';
 import './Dashboard.scss';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 
 const Dashboard = () => {
   return (
     <div className="dashboard">
       <header className="dashboard__header">
         <div className="logo">WayFare</div>
-        <nav>
-          <a href="#" className="active">Dashboard</a>
-          <a href="#">Book Trip</a>
-          <a href="#">My Tickets</a>
-          <a href="#">Support</a>
-        </nav>
+         <nav>
+            <Link to="/dashboard" className="active">Dashboard</Link>
+            <Link to="#">Book Trip</Link>
+            <Link to="/ticket">My Tickets</Link>
+            <Link to="#">Support</Link>
+          </nav>
         <div className="user-menu">
           <span>John Banda</span>
           <button className="logout-btn">
@@ -130,7 +131,7 @@ const Dashboard = () => {
           </div>
         </div>
         <div className="footer-bottom">
-          <p>&copy; 2023 WayFare. All rights reserved.</p>
+          <p>&copy; 2024 WayFare. All rights reserved.</p>
         </div>
       </footer>
     </div>

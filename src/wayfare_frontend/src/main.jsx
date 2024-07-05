@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';  // Import rout
 import App from './App';
 import Dashboard from './Dashboard';  // Import your Dashboard component
 import './index.scss';
+import Ticket from './Ticket';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -11,6 +12,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <Routes>
         <Route path="/" element={<App />} />  {/* Define the route for the main App component */}
         <Route path="/dashboard" element={<Dashboard />} />  {/* Define the route for the Dashboard component */}
+        <Route path="/ticket" element={<Ticket />} />  {/* Define the route for the Dashboard component */}
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,
