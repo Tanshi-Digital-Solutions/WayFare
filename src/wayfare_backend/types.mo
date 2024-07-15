@@ -1,5 +1,4 @@
 // types.mo
-import Result "mo:base/Result";
 import Text "mo:base/Text";
 import Time "mo:base/Time";
 

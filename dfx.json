@@ -3,7 +3,10 @@
     "wayfare_backend": {
       "main": "src/wayfare_backend/main.mo",
       "type": "motoko"
-      
+    },
+    "ticket": {
+      "main": "src/wayfare_backend/ticket.mo",
+      "type": "motoko"
     },
     "wayfare_frontend": {
       "dependencies": [
