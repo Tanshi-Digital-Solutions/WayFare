@@ -30,6 +30,7 @@ const App = () => {
     if ('ok' in result) {
       showNotification(result.ok, 'success');
       if (action === "Login") {
+        localStorage.setItem('userEmail', email);
         navigate('/dashboard');  // Navigate to the Dashboard page upon successful login
       }
     } else if ('err' in result) {

@@ -1,0 +1,261 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+$primary-color: #3498db;
+$header-height: 60px;
+
+.booking-form-page {
+  min-height: 100vh;
+  padding-top: $header-height;
+  background-color: #f0f0f0;
+}
+
+.dashboard-header {
+  background-color: $primary-color;
+  color: white;
+  padding: 0 20px;
+  height: $header-height;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+
+  .logo {
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  nav {
+    display: flex;
+    gap: 20px;
+
+    a {
+      color: white;
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+
+      &:hover,
+      &.active {
+        background-color: darken($primary-color, 10%);
+      }
+    }
+  }
+
+  .user-menu {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .logout-btn {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.booking-form-container {
+  font-family: 'Poppins', sans-serif;
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.booking-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  h2 {
+    color: $primary-color;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+      color: #2c3e50;
+
+      svg {
+        color: $primary-color;
+      }
+    }
+
+    input,
+    select {
+      padding: 0.75rem;
+      border: 1px solid #bdc3c7;
+      border-radius: 5px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+
+      &:focus {
+        outline: none;
+        border-color: $primary-color;
+      }
+    }
+
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%233498db' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      background-size: 1em;
+    }
+
+    option {
+      padding: 0.5rem;
+
+      &:first-child {
+        color: #7f8c8d;
+      }
+    }
+
+    // Special styling for the recommended option
+    select#provider option:nth-child(2) {
+      font-weight: 600;
+      color: #27ae60;
+
+      &::after {
+        content: " ★";
+        color: #f1c40f;
+      }
+    }
+  }
+
+  input,
+  select {
+    &:hover {
+      border-color: darken($primary-color, 10%);
+    }
+  }
+
+  .submit-button {
+    margin-top: 1rem;
+    padding: 1rem 2rem;
+    background-color: $primary-color;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+      transform: translateY(-2px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba($primary-color, 0.5);
+    }
+  }
+
+  .form-group.error {
+    input,
+    select {
+      border-color: #e74c3c;
+    }
+
+    .error-message {
+      color: #e74c3c;
+      font-size: 0.85rem;
+      margin-top: 0.25rem;
+    }
+  }
+
+  .booking-success {
+    text-align: center;
+    color: #27ae60;
+    font-weight: 600;
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: #e8f8f5;
+    border-radius: 5px;
+    animation: fadeInUp 0.4s ease-out;
+  }
+}
+
+// Custom scrollbar for select dropdowns
+select::-webkit-scrollbar {
+  width: 8px;
+}
+
+select::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+select::-webkit-scrollbar-thumb {
+  background: $primary-color;
+  border-radius: 4px;
+}
+
+select::-webkit-scrollbar-thumb:hover {
+  background: darken($primary-color, 10%);
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .booking-form-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+
+  .booking-form {
+    h2 {
+      font-size: 1.75rem;
+    }
+
+    .form-group {
+      input,
+      select {
+        font-size: 0.9rem;
+      }
+    }
+
+    .submit-button {
+      font-size: 1rem;
+    }
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

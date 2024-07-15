@@ -3,6 +3,7 @@
     "wayfare_backend": {
       "main": "src/wayfare_backend/main.mo",
       "type": "motoko"
+      
     },
     "wayfare_frontend": {
       "dependencies": [
@@ -18,7 +19,7 @@
   "defaults": {
     "build": {
       "args": "",
-      "packtool": ""
+      "packtool": "mops sources"
     }
   },
   "output_env_file": ".env",

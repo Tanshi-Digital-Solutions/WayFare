@@ -57,6 +57,36 @@ async function initialize() {
     }
   });
 
+  app.post('/api/initiateDeposit', async (req, res) => {
+    const {email, amount} = req.body;
+    try {
+      const result = await actor.initiateDeposit(email, amount);
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post('/api/verifyDeposit', async (req, res) => {
+    const {email, amount, password} = req.body;
+    try {
+      const result = await actor.verifyDeposit(email, BigInt(amount), password);
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post('/api/getPendingDeposits', async (req, res) => {
+    const {email} = req.body;
+    try {
+      const result = await actor.getPendingDeposits(email);
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   const PORT = 3000;
   app.listen(PORT, () => console.log(`Proxy server running on port ${PORT}`));
 }

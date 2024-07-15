@@ -1,0 +1,170 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+$primary-color: #3498db;
+$header-height: 60px;
+
+.contact-us-page {
+  min-height: 100vh;
+  padding-top: $header-height;
+  background-color: #f0f0f0;
+}
+
+.dashboard-header {
+  background-color: $primary-color;
+  color: white;
+  padding: 0 20px;
+  height: $header-height;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+
+  .logo {
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  nav {
+    display: flex;
+    gap: 20px;
+
+    a {
+      color: white;
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+
+      &:hover,
+      &.active {
+        background-color: darken($primary-color, 10%);
+      }
+    }
+  }
+
+  .user-menu {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .logout-btn {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.contact-us-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: linear-gradient(to bottom right, #e6f7ff, #e6fffa);
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: 'Poppins', sans-serif;
+  animation: fadeIn 0.5s ease-out;
+
+  h2 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .input-group {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 5px;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+
+    &:focus-within {
+      box-shadow: 0 0 0 2px $primary-color;
+    }
+
+    svg {
+      margin: 0 10px;
+      color: $primary-color;
+    }
+
+    input, textarea {
+      flex-grow: 1;
+      border: none;
+      padding: 10px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+  }
+
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background-color: $primary-color;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+
+    svg {
+      transition: transform 0.3s ease;
+    }
+
+    &:hover svg {
+      transform: translateX(5px);
+    }
+  }
+
+  .success-message {
+    text-align: center;
+    color: #2ecc71;
+    font-weight: bold;
+    padding: 1rem;
+    background-color: #e8f8f5;
+    border-radius: 5px;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.input-group, button {
+  animation: fadeIn 0.5s ease-out forwards;
+  opacity: 0;
+
+  @for $i from 1 through 4 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{$i * 0.1}s;
+    }
+  }
+}

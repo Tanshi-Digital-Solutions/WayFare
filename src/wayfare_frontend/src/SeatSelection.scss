@@ -1,0 +1,197 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+// Variables
+$primary-color: #4a90e2;
+$secondary-color: #50c878;
+$text-color: #333;
+$background-color: #f9f9f9;
+$header-height: 60px;
+
+.seat-selection-page {
+  min-height: 100vh;
+  padding-top: $header-height;
+  background-color: #f0f0f0;
+
+  .dashboard-header {
+    background-color: $primary-color;
+    color: white;
+    padding: 0 20px;
+    height: $header-height;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    nav {
+      display: flex;
+      gap: 20px;
+
+      a {
+        color: white;
+        text-decoration: none;
+        padding: 5px 10px;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+
+        &:hover,
+        &.active {
+          background-color: darken($primary-color, 10%);
+        }
+      }
+    }
+
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      .logout-btn {
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  .seat-selection-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Roboto', sans-serif;
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 24px;
+      color: $text-color;
+      font-weight: 700;
+    }
+
+    .bus-layout {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 30px;
+
+      .seat-group {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        max-width: 300px;
+      }
+
+      .seat {
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid $primary-color;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 400;
+        color: $primary-color;
+        background-color: #fff;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background-color: lighten($primary-color, 35%);
+        }
+
+        &.booked {
+          background-color: #f0f0f0;
+          border-color: #ccc;
+          color: #999;
+          cursor: not-allowed;
+        }
+
+        &.selected {
+          background-color: $secondary-color;
+          color: white;
+        }
+      }
+    }
+
+    .booking-confirmation {
+      background-color: $background-color;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+      h3 {
+        margin-bottom: 15px;
+        font-size: 20px;
+        color: $text-color;
+        font-weight: 700;
+      }
+
+      .confirmation-details {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+
+        .detail-item {
+          .detail-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            color: $primary-color;
+
+            svg {
+              margin-right: 8px;
+            }
+
+            span {
+              font-weight: 700;
+            }
+          }
+
+          p {
+            margin: 0;
+            padding-left: 26px;
+            color: $text-color;
+            font-weight: 300;
+          }
+        }
+      }
+
+      .finalise-button {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        margin-top: 20px;
+        background-color: $primary-color;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 700;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: $secondary-color;
+        }
+
+        &:disabled {
+          background-color: #ccc;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+}

@@ -118,6 +118,12 @@
       margin-right: 10px;
       color: #3498db;
     }
+    &:nth-child(4) {  // This targets the seat number
+      svg {
+        transform: rotate(45deg);  // Rotate the arrow to make it look like a seat icon
+      }
+    }
+
   }
 }
 

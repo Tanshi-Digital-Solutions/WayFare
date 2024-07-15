@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
-import { ChevronDown, ChevronUp, Calendar, MapPin, Clock, DollarSign, User, Barcode } from 'lucide-react';
+import { ChevronDown, ChevronUp, Calendar, MapPin, Clock, DollarSign, User, Barcode, ArrowRight } from 'lucide-react';
 import './Ticket.scss';
-import wayLogo from './waylogo.png'; 
+import wayLogo from './waylogo.png';
 
 const StatusBadge = ({ status }) => {
   return <span className={`status-badge ${status.toLowerCase()}`}>{status}</span>;
@@ -23,7 +23,6 @@ const Ticket = ({ status = 'Active' }) => {
         <div className="ticket-header">
           <div className="wayfare-branding">
             <h1>WayFare</h1>
-            {/* TODO: Replace with actual logo */}
             <img src={wayLogo} alt="WayFare Logo" className="wayfare-logo" />
           </div>
           <div className="provider-info">
@@ -37,6 +36,7 @@ const Ticket = ({ status = 'Active' }) => {
               <p><User size={16} /> <strong>Passenger:</strong> John Banda</p>
               <p><MapPin size={16} /> <strong>Route:</strong> Lusaka to Kitwe</p>
               <p><Calendar size={16} /> <strong>Departure:</strong> 19/07/2024 08:00 AM</p>
+              <p><ArrowRight size={16} /> <strong>Seat:</strong> 14B</p>
               <p><DollarSign size={16} /> <strong>Price:</strong> ZMW 305</p>
               <p><Barcode size={16} /> <strong>Ticket Code:</strong> {ticketCode}</p>
             </div>
