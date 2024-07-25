@@ -38,7 +38,7 @@ Installation
 Clone the repo
 sh
 Copy code
-git clone https://github.com/yourusername/wayfare-bus-ticketing.git
+git clone https://github.com/Tanshi-Digital-Solutions/WayFare.git
 Install NPM packages
 sh
 Copy code
