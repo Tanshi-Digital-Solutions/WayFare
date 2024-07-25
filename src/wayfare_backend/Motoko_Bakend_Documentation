@@ -1,0 +1,184 @@
+Sure, here is the documentation for `main.mo`, `types.mo`, and `ticket.mo` in Markdown format:
+
+---
+
+# WayFare Bus Ticketing System Documentation
+
+## Overview
+
+WayFare is a blockchain-based bus ticketing system built using Web3 technologies. This documentation covers the main components of the system, specifically `main.mo`, `types.mo`, and `ticket.mo`.
+
+---
+
+## `main.mo`
+
+This file is the core of the WayFare system, handling user and agent management, deposit functionality, and ticket purchase operations.
+
+### Functions
+
+#### `createUser(name: Text, email: Text, password: Text) : async Result.Result<Text, Text>`
+Creates a new user with the provided name, email, and password.
+
+#### `login(email: Text, password: Text) : async Result.Result<Text, Text>`
+Logs in a user with the provided email and password.
+
+#### `createAgent(name: Text, email: Text, password: Text) : async Result.Result<Text, Text>`
+Creates a new agent with the provided name, email, and password.
+
+#### `agentLogin(email: Text, password: Text) : async Result.Result<Text, Text>`
+Logs in an agent with the provided email and password.
+
+#### `getUserName(email: Text): async Result.Result<Text, Text>`
+Fetches the name of the user associated with the provided email.
+
+#### `getUserTrips(email: Text): async Result.Result<Int, Text>`
+Fetches the number of trips taken by the user associated with the provided email.
+
+#### `getUserTotalDistance(email: Text): async Result.Result<Int, Text>`
+Fetches the total distance traveled by the user associated with the provided email.
+
+#### `checkDepositStatus(email: Text, amount: Int): async Result.Result<Text, Text>`
+Checks the status of a deposit for a user.
+
+#### `getBalance(email: Text): async Result.Result<Int, Text>`
+Fetches the account balance of the user associated with the provided email.
+
+#### `initiateDeposit(email: Text, amount: Int): async Result.Result<Text, Text>`
+Initiates a deposit for the user associated with the provided email.
+
+#### `verifyDeposit(email: Text, amount: Int, password: Text): async Result.Result<Text, Text>`
+Verifies a deposit for the user associated with the provided email and password.
+
+#### `getPendingDeposits(email: Text): async Result.Result<[Types.PendingDeposit], Text>`
+Fetches the pending deposits for the user associated with the provided email.
+
+#### `getUser(userUniqueCode: Text) : async Result.Result<Types.ShareableUser, Text>`
+Fetches the user associated with the provided unique code.
+
+#### `updateUser(updatedUser: Types.ShareableUser) : async Result.Result<Text, Text>`
+Updates the user information with the provided data.
+
+#### `purchaseTicket(email: Text, providerId: Text, departLocation: Text, destination: Text, distance: Nat, price: Nat, paymentMethod: Text, departureDateTime: Text) : async Result.Result<Text, Text>`
+Purchases a ticket for the user associated with the provided email.
+
+#### `getTicketInfo(ticketCode: Text) : async Result.Result<Types.Ticket, Text>`
+Fetches the ticket information associated with the provided ticket code.
+
+#### `validateTicket(ticketCode: Text, email: Text) : async Result.Result<Bool, Text>`
+Validates a ticket for the user associated with the provided email.
+
+---
+
+## `types.mo`
+
+This file contains type definitions used throughout the WayFare system.
+
+### Types
+
+#### `User`
+Represents a user in the system.
+```motoko
+type User = {
+    name: Text;
+    email: Text;
+    password: Text;
+    accountBalance: Int;
+    pendingDeposits: [PendingDeposit];
+    paymentMethods: ?[Text];
+    phone: ?Text;
+    tickets: ?[Text];
+    trips: Int;
+    totalDistance: Int;
+    isLoggedIn: Bool;
+    uniqueCode: Text;
+    internetIdentity: ?Principal;
+};
+```
+
+#### `Agent`
+Represents an agent in the system.
+```motoko
+type Agent = {
+    id: Text;
+    name: Text;
+    email: Text;
+    password: Text;
+    internetIdentity: Principal;
+    isLoggedIn: Bool;
+};
+```
+
+#### `PendingDeposit`
+Represents a pending deposit.
+```motoko
+type PendingDeposit = {
+    amount: Int;
+    timestamp: Int;
+};
+```
+
+#### `ShareableUser`
+Represents a user with shareable information.
+```motoko
+type ShareableUser = {
+    name: Text;
+    email: Text;
+    accountBalance: Int;
+    pendingDeposits: [PendingDeposit];
+    paymentMethods: ?[Text];
+    phone: ?Text;
+    tickets: ?[Text];
+    trips: Int;
+    totalDistance: Int;
+    isLoggedIn: Bool;
+    uniqueCode: Text;
+    internetIdentity: ?Principal;
+};
+```
+
+#### `Ticket`
+Represents a ticket.
+```motoko
+type Ticket = {
+    code: Text;
+    providerId: Text;
+    departLocation: Text;
+    destination: Text;
+    distance: Nat;
+    passengerName: Text;
+    price: Nat;
+    paymentMethod: Text;
+    departureDateTime: Text;
+    status: Text;
+    purchaseTime: Int;
+};
+```
+
+---
+
+## `ticket.mo`
+
+This file handles ticket creation, management, and validation.
+
+### Functions
+
+#### `createTicket(providerId: Text, departLocation: Text, destination: Text, distance: Nat, passengerName: Text, price: Nat, paymentMethod: Text, departureDateTime: Text) : async Result.Result<Types.Ticket, Text>`
+Creates a new ticket with the provided details.
+
+#### `getTicket(ticketCode: Text) : async Result.Result<Types.Ticket, Text>`
+Fetches the ticket associated with the provided ticket code.
+
+#### `updateTicketStatus(ticketCode: Text, newStatus: Text) : async Result.Result<Text, Text>`
+Updates the status of the ticket associated with the provided ticket code.
+
+#### `validateTicket(ticketCode: Text, userUniqueCode: Text) : async Result.Result<Bool, Text>`
+Validates the ticket for the user associated with the provided unique code.
+
+### Helper Functions
+
+#### `generateTicketCode() : Text`
+Generates a unique code for a new ticket.
+
+---
+
+This documentation covers the key components and functions of the WayFare system. For more details, please refer to the source code and inline comments.

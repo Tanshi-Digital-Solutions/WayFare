@@ -1,59 +1,90 @@
-# `wayfare`
+WayFare Bus Ticketing System
+Welcome to the WayFare Bus Ticketing System! This project aims to revolutionize bus ticketing by leveraging blockchain technology and Web3 principles to create a seamless and secure user experience.
 
-Welcome to your new `wayfare` project and to the Internet Computer development community. By default, creating a new project adds this README and some template files to your project directory. You can edit these template files to customize your project and to include your own code to speed up the development cycle.
+Table of Contents
+Introduction
+Features
+Tech Stack
+Getting Started
+File Structure
+Usage
+Contributing
+License
+Introduction
+WayFare is a bus ticketing system built with modern web technologies and decentralized principles. By integrating blockchain and Web3, we ensure secure, transparent, and efficient transactions. This system allows users to book, view, and manage bus tickets with ease.
 
-To get started, you might want to explore the project directory structure and the default configuration file. Working with this project in your development environment will not affect any production deployment or identity tokens.
+Features
+User Registration and Authentication: Secure sign-up and login functionality using traditional and Web3 methods.
+Ticket Booking: Users can book bus tickets by selecting routes, dates, and seats.
+Payment Integration: Supports payments through various methods, including blockchain-based transactions.
+View Past Tickets: Users can view their past tickets with detailed information.
+Agent Management: Agents can be created and managed with specific privileges.
+Deposit and Balance Management: Users can initiate deposits and check their account balance.
+Ticket Validation: Validate tickets to ensure they are used only once.
+Tech Stack
+Frontend: React, Jetpack Compose, Kotlin
+Backend: Motoko (running on the Internet Computer), Node.js proxy server
+Blockchain: Web3, Internet Computer
+Styling: SCSS
+Icons: Lucide-react
+Getting Started
+To get a local copy up and running, follow these simple steps.
 
-To learn more before you start working with `wayfare`, see the following documentation available online:
-
-- [Quick Start](https://internetcomputer.org/docs/current/developer-docs/setup/deploy-locally)
-- [SDK Developer Tools](https://internetcomputer.org/docs/current/developer-docs/setup/install)
-- [Motoko Programming Language Guide](https://internetcomputer.org/docs/current/motoko/main/motoko)
-- [Motoko Language Quick Reference](https://internetcomputer.org/docs/current/motoko/main/language-manual)
-
-If you want to start working on your project right away, you might want to try the following commands:
-
-```bash
-cd wayfare/
-dfx help
-dfx canister --help
-```
-
-## Running the project locally
-
-If you want to test your project locally, you can use the following commands:
-
-```bash
-# Starts the replica, running in the background
-dfx start --background
-
-# Deploys your canisters to the replica and generates your candid interface
+Prerequisites
+Node.js
+DFX (Dfinity SDK)
+npm or yarn
+Installation
+Clone the repo
+sh
+Copy code
+git clone https://github.com/yourusername/wayfare-bus-ticketing.git
+Install NPM packages
+sh
+Copy code
+npm install
+Start the backend
+sh
+Copy code
+dfx start
+Deploy the canisters
+sh
+Copy code
 dfx deploy
-```
-
-Once the job completes, your application will be available at `http://localhost:4943?canisterId={asset_canister_id}`.
-
-If you have made changes to your backend canister, you can generate a new candid interface with
-
-```bash
-npm run generate
-```
-
-at any time. This is recommended before starting the frontend development server, and will be run automatically any time you run `dfx deploy`.
-
-If you are making frontend changes, you can start a development server with
-
-```bash
+Start the proxy server
+sh
+Copy code
+node proxy-server.js
+Start the frontend
+sh
+Copy code
 npm start
-```
+File Structure
+plaintext
+Copy code
 
-Which will start a server at `http://localhost:8080`, proxying API requests to the replica at port 4943.
+Usage
+User Registration
+To register a new user, use the createUser function. The system ensures each user has a unique code for identification.
 
-### Note on frontend environment variables
+Booking a Ticket
+Users can book tickets through the booking page by providing trip details and selecting a payment method. The backend handles ticket creation and updates the user's account.
 
-If you are hosting frontend code somewhere without using DFX, you may need to make one of the following adjustments to ensure your project does not fetch the root key in production:
+Viewing Past Tickets
+Users can view their past tickets in the MyTickets page. The MyTicket component displays minimal ticket information, and clicking on a ticket shows detailed information using the TicketDetail component.
 
-- set`DFX_NETWORK` to `ic` if you are using Webpack
-- use your own preferred method to replace `process.env.DFX_NETWORK` in the autogenerated declarations
-  - Setting `canisters -> {asset_canister_id} -> declarations -> env_override to a string` in `dfx.json` will replace `process.env.DFX_NETWORK` with the string in the autogenerated declarations
-- Write your own `createActor` constructor
+Agent Management
+Agents can be created and managed with the createAgent and agentLogin functions. These functions ensure only authorized agents can access the system.
+
+Contributing
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
+
+Fork the Project
+Create your Feature Branch (git checkout -b feature/AmazingFeature)
+Commit your Changes (git commit -m 'Add some AmazingFeature')
+Push to the Branch (git push origin feature/AmazingFeature)
+Open a Pull Request
+
+Thank you for checking out the WayFare Bus Ticketing System! We hope you find this project useful and look forward to your contributions. If you have any questions or feedback, feel free to open an issue or contact us.
+
+Happy coding! 🚀
