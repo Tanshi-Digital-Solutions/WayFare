@@ -10,7 +10,7 @@ const __dirname = dirname(__filename);
 const app = express();
 app.use(express.json());
 
-const canisterId = 'bkyz2-fmaaa-aaaaa-qaaaq-cai';
+const canisterId = 'bd3sg-teaaa-aaaaa-qaaba-cai';
 const host = 'http://127.0.0.1:4943';
 const agent = new HttpAgent({ host });
 

@@ -10,7 +10,8 @@
     },
     "wayfare_frontend": {
       "dependencies": [
-        "wayfare_backend"
+        "wayfare_backend",
+        "ticket"
       ],
       "source": [
         "src/wayfare_frontend/dist"

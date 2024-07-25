@@ -1,12 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { User, MapPin, Calendar, DollarSign, CreditCard } from 'lucide-react';
 import './SeatSelection.scss';
-import { useNavigate, Link } from 'react-router-dom';
+import { wayfare_backend } from 'declarations/wayfare_backend';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 
 const SeatSelection = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { bookingDetails, email } = location.state;
+
   const [selectedSeat, setSelectedSeat] = useState(null);
   const [bookedSeats] = useState([1, 5, 12, 25, 30, 42, 55]); // Example booked seats
-  const navigate = useNavigate();
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userEmail = localStorage.getItem('userEmail');
+        if (!userEmail) {
+          navigate('/');
+          return;
+        }
+
+        const nameResult = await wayfare_backend.getUserName(userEmail);
+        setUserData({
+          name: 'ok' in nameResult ? nameResult.ok : 'User',
+        });
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, [navigate]);
 
   const handleSeatClick = (seat) => {
     if (!bookedSeats.includes(seat)) {
@@ -40,6 +66,29 @@ const SeatSelection = () => {
     return rows;
   };
 
+  const handleFinaliseBooking = async () => {
+    if (!selectedSeat) return;
+
+    const { provider, startLocation, endLocation, departureDate, paymentOption } = bookingDetails;
+
+    const result = await wayfare_backend.purchaseTicket(
+      email,
+      provider,
+      startLocation,
+      endLocation,
+      417, // Assuming fixed distance for now
+      305,
+      paymentOption,
+      departureDate
+    );
+
+    if ('ok' in result) {
+      navigate('/ticket', { state: { ticketCode: result.ok, bookingDetails, selectedSeat } });
+    } else {
+      console.error(result.err);
+    }
+  };
+
   return (
     <div className="seat-selection-page">
       <header className="dashboard-header">
@@ -51,7 +100,7 @@ const SeatSelection = () => {
           <Link to="/contactus">Support</Link>
         </nav>
         <div className="user-menu">
-          <span>John Banda</span>
+          <span>{userData ? userData.name : 'Loading...'}</span>
           <button className="logout-btn" onClick={() => navigate('/')}>
             Logout
           </button>
@@ -72,28 +121,28 @@ const SeatSelection = () => {
                 <User size={18} />
                 <span>Passenger</span>
               </div>
-              <p>John Banda</p>
+              <p>{bookingDetails.passenger}</p>
             </div>
             <div className="detail-item">
               <div className="detail-header">
                 <MapPin size={18} />
                 <span>Route</span>
               </div>
-              <p>Lusaka to Kitwe</p>
+              <p>{bookingDetails.startLocation} to {bookingDetails.endLocation}</p>
             </div>
             <div className="detail-item">
               <div className="detail-header">
                 <Calendar size={18} />
                 <span>Departure</span>
               </div>
-              <p>{new Date().toLocaleDateString()}</p>
+              <p>{bookingDetails.departureDate} 08:00 AM</p>
             </div>
             <div className="detail-item">
               <div className="detail-header">
                 <CreditCard size={18} />
                 <span>Payment Method</span>
               </div>
-              <p>WayFare Balance</p>
+              <p>{bookingDetails.paymentOption}</p>
             </div>
             <div className="detail-item">
               <div className="detail-header">
@@ -112,7 +161,7 @@ const SeatSelection = () => {
               </div>
             )}
           </div>
-          <button className="finalise-button" disabled={!selectedSeat}>
+          <button className="finalise-button" onClick={handleFinaliseBooking} disabled={!selectedSeat}>
             Finalise Booking
           </button>
         </div>

@@ -132,6 +132,7 @@ actor Main {
         };
     };
 
+    
     public query func getUserTotalDistance(email: Text): async Result.Result<Int, Text> {
         switch (findUserByEmail(email)) {
             case (?user) {
@@ -263,6 +264,23 @@ actor Main {
             };
         }; 
     };
+    public query func getUserTickets(email: Text): async Result.Result<[Text], Text> {
+    switch (findUserByEmail(email)) {
+        case (?user) {
+            switch (user.tickets) {
+                case (?tickets) {
+                    #ok(tickets)
+                };
+                case (null) {
+                    #ok([]) // Return an empty array if the user has no tickets
+                };
+            };
+        };
+        case (null) {
+            #err("User not found")
+        };
+    };
+};
 
     public shared(msg) func updateUser(updatedUser: Types.ShareableUser) : async Result.Result<Text, Text> {
         let userEntries = Iter.toArray(userMap.entries());
@@ -295,71 +313,73 @@ actor Main {
     };
 
     public shared(msg) func purchaseTicket(
-        providerId: Text,
-        departLocation: Text,
-        destination: Text,
-        distance: Nat,
-        price: Nat,
-        paymentMethod: Text,
-        departureDateTime: Text
-    ) : async Result.Result<Text, Text> {
-        let caller = msg.caller;
-        
-        switch (getUserByPrincipal(caller)) {
-            case (null) { return #err("User account not found"); };
-            case (?user) {
-                if (user.accountBalance < price) {
-                    return #err("Insufficient balance");
-                };
-                
-                // Deduct the ticket price from the user's balance
-                user.accountBalance -= price;
-                
-                // Create ticket using the Ticket canister
-                let ticketResult = await Ticket.createTicket(
-                    providerId,
-                    departLocation,
-                    destination,
-                    distance,
-                    user.name,
-                    price,
-                    paymentMethod,
-                    departureDateTime
-                );
-                
-                switch (ticketResult) {
-                    case (#ok(ticket)) {
-                        // Add the ticket code to the user's tickets array
-                        switch (user.tickets) {
-                            case (null) { user.tickets := ?[ticket.code]; };
-                            case (?existingTickets) { user.tickets := ?Array.append(existingTickets, [ticket.code]); };
-                        };
-
-                        // Update the user in the userMap
-                        userMap.put(user.email, user);
-                        
-                        #ok(ticket.code)
-                    };
-                    case (#err(e)) { #err(e) };
-                };
+    email: Text,
+    providerId: Text,
+    departLocation: Text,
+    destination: Text,
+    distance: Nat,
+    price: Nat,
+    paymentMethod: Text,
+    departureDateTime: Text
+) : async Result.Result<Text, Text> {
+    // Fetch user by email
+    switch (findUserByEmail(email)) {
+        case (null) { return #err("User account not found"); };
+        case (?user) {
+            if (user.accountBalance < price) {
+                return #err("Insufficient balance");
             };
-        };
-    };
+            
+            // Deduct the ticket price from the user's balance
+            user.accountBalance -= price;
+            
+            // Create ticket using the Ticket canister
+            let ticketResult = await Ticket.createTicket(
+                providerId,
+                departLocation,
+                destination,
+                distance,
+                user.name,
+                price,
+                paymentMethod,
+                departureDateTime
+            );
+            
+            switch (ticketResult) {
+                case (#ok(ticket)) {
+                    // Add the ticket code to the user's tickets array
+                    switch (user.tickets) {
+                        case (null) { user.tickets := ?[ticket.code]; };
+                        case (?existingTickets) { user.tickets := ?Array.append(existingTickets, [ticket.code]); };
+                    };
+                    
+                    // Update the user in the userMap
+                    userMap.put(user.email, user);
+                    
+                    #ok(ticket.code)
+                };
+                case (#err(e)) { #err(e) }
+            }
+        }
+    }
+};
+
 
     public func getTicketInfo(ticketCode: Text) : async Result.Result<Types.Ticket, Text> {
         await Ticket.getTicket(ticketCode)
     };
 
-    public shared(msg) func validateTicket(ticketCode: Text) : async Result.Result<Bool, Text> {
-        let caller = msg.caller;
-        
-        switch (getUserByPrincipal(caller)) {
-            case (null) { return #err("User account not found"); };
-            case (?user) {
-                await Ticket.validateTicket(ticketCode, user.uniqueCode)
-            };
+    public shared(msg) func validateTicket(ticketCode: Text, email: Text) : async Result.Result<Bool, Text> {
+    switch (findUserByEmail(email)) {
+        case (null) { return #err("User account not found"); };
+        case (?user) {
+            user.trips += 1;
+            user.totalDistance += 417;
+            await Ticket.validateTicket(ticketCode, user.uniqueCode);
+            
         };
     };
+};
 
     // Helper function to get user by Principal
     private func getUserByPrincipal(userPrincipal: Principal) : ?Types.User {

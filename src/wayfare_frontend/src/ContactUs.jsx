@@ -1,14 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { User, Mail, MessageSquare, Send } from 'lucide-react';
 import './ContactUs.scss';
 import { useNavigate, Link } from 'react-router-dom';
+import { wayfare_backend } from 'declarations/wayfare_backend';
 
 const ContactUs = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userEmail = localStorage.getItem('userEmail');
+        if (!userEmail) {
+          navigate('/');
+          return;
+        }
+
+        const nameResult = await wayfare_backend.getUserName(userEmail);
+        setUserData({
+          name: 'ok' in nameResult ? nameResult.ok : 'User',
+        });
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, [navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -30,7 +53,7 @@ const ContactUs = () => {
           <Link to="/contactus">Support</Link>
         </nav>
         <div className="user-menu">
-          <span>User Name</span>
+          <span>{userData ? userData.name : 'Loading...'}</span>
           <button className="logout-btn" onClick={() => navigate('/')}>
             Logout
           </button>

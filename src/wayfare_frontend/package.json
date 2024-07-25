@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "setup": "npm i && dfx canister create wayfare_backend && dfx generate wayfare_backend && dfx deploy",
+    "setup": "npm i && dfx canister create wayfare_backend && dfx generate wayfare_backend && dfx deploy && dfx generate ticket",
     "start": "vite --port 3000",
     "prebuild": "dfx generate",
     "build": "tsc && vite build",
