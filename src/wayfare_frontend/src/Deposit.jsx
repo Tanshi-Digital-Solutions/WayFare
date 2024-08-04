@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { wayfare_backend } from 'declarations/wayfare_backend';
+import DashboardHeader from './DashboardHeader';
 import { useNavigate, Link } from 'react-router-dom';
 import './Deposit.scss';
+
 
 const Deposit = () => {
   const [amount, setAmount] = useState('');
@@ -9,7 +11,31 @@ const Deposit = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [depositStatus, setDepositStatus] = useState('');
+  const [userData, setUserData] = useState(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userEmail = localStorage.getItem('userEmail');
+        if (!userEmail) {
+          navigate('/');
+          return;
+        }
+
+        const nameResult = await wayfare_backend.getUserName(userEmail);
+        setUserData({
+          name: 'ok' in nameResult ? nameResult.ok : 'User',
+        });
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, [navigate]);
+
 
   const handleDeposit = async (e) => {
     e.preventDefault();
@@ -71,23 +97,24 @@ const Deposit = () => {
     }
   };
 
+  const handleLogout = () => {
+    // Implement logout logic here
+    localStorage.removeItem('userEmail');
+    navigate('/');
+  };
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
   return (
     <div className="deposit-page">
-      <header className="dashboard-header">
-        <div className="logo">WayFare</div>
-        <nav>
-          <Link to="/dashboard">Dashboard</Link>
-          <Link to="/booking">Book Trip</Link>
-          <Link to="/mytickets">My Tickets</Link>
-          <Link to="/contactus">Support</Link>
-        </nav>
-        <div className="user-menu">
-          <span>User Name</span>
-          <button className="logout-btn" onClick={() => navigate('/')}>
-            Logout
-          </button>
-        </div>
-      </header>
+      <DashboardHeader
+        userData={userData}
+        handleLogout={handleLogout}
+        toggleMobileMenu={toggleMobileMenu}
+        mobileMenuOpen={mobileMenuOpen}
+      />
       <div className="deposit-container">
         <h1>Deposit Funds</h1>
         <form onSubmit={handleDeposit}>

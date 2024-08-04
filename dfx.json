@@ -4,14 +4,11 @@
       "main": "src/wayfare_backend/main.mo",
       "type": "motoko"
     },
-    "ticket": {
-      "main": "src/wayfare_backend/ticket.mo",
-      "type": "motoko"
-    },
+    
     "wayfare_frontend": {
       "dependencies": [
-        "wayfare_backend",
-        "ticket"
+        "wayfare_backend"
+        
       ],
       "source": [
         "src/wayfare_frontend/dist"

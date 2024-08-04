@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { User, CreditCard, Map, LogOut, Home, Book, Clock, Settings, HelpCircle, BarChart } from 'lucide-react';
+import { User, CreditCard, Map, LogOut, Home, Book, Clock, Settings, HelpCircle, BarChart, BusFront, Menu } from 'lucide-react';
 import './Dashboard.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import { wayfare_backend } from 'declarations/wayfare_backend';
@@ -7,6 +7,8 @@ import { wayfare_backend } from 'declarations/wayfare_backend';
 const Dashboard = () => {
   const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     fetchUserData();
@@ -45,18 +47,29 @@ const Dashboard = () => {
     return <div>Loading...</div>;
   }
 
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
   return (
     <div className="dashboard">
       <header className="dashboard__header">
         <div className="logo">WayFare</div>
-        <nav>
+        <button className="mobile-menu-toggle" onClick={toggleMobileMenu}>
+          <Menu size={24} />
+        </button>
+        <nav className={`desktop-nav ${mobileMenuOpen ? 'mobile-nav-open' : ''}`}>
           <Link to="/dashboard" className="active">Dashboard</Link>
           <Link to="/booking">Book Trip</Link>
           <Link to="/mytickets">My Tickets</Link>
           <Link to="/contactus">Support</Link>
         </nav>
         <div className="user-menu">
-          <span>{userData.name}</span>
+          <span>{userData?.name}</span>
           <button className="logout-btn" onClick={handleLogout}>
             <LogOut size={18} />
             Logout
@@ -65,13 +78,16 @@ const Dashboard = () => {
       </header>
       
       <div className="dashboard__content">
-        <aside className="dashboard__sidebar">
+        <button className="sidebar-toggle" onClick={toggleSidebar}>
+          <Menu size={20} />
+        </button>
+        <aside className={`dashboard__sidebar ${sidebarOpen ? 'sidebar-open' : ''}`}>
           <nav>
-            <a href="#" className="active"><Home size={20} /> Home</a>
-            <a href="#"><Book size={20} /> Bookings</a>
-            <a href="#"><Clock size={20} /> History</a>
+            <a href="/dashboard" className="active"><Home size={20} /> Home</a>
+            <a href="/providers"><BusFront size={20} /> Providers</a>
+            <a href="/schedule"><Clock size={20} /> Schedule</a>
             <a href="#"><Settings size={20} /> Settings</a>
-            <a href="#"><HelpCircle size={20} /> Help</a>
+            <a href="/contactus"><HelpCircle size={20} /> Help</a>
           </nav>
         </aside>
         
@@ -88,15 +104,15 @@ const Dashboard = () => {
               </div>
               <div className="user-info">
                 <h2>{userData.name}</h2>
-                <p>Frequent Traveler</p>
-                <p>Member since: Jan 2023</p>
+                <p>New User</p>
+                <p>Member since: Aug 2024</p>
               </div>
             </section>
             
             <section className="account-balance">
               <CreditCard size={24} />
               <h3>Account Balance</h3>
-              <p className="balance">{userData.balance > 0 ? `${userData.balance} ZMW` : ''}</p>
+              <p className="balance">{userData.balance > 0 ? `${userData.balance} ZMW` : '0'}</p>
               <Link to="/deposit" className="top-up-btn">Top Up</Link>
             </section>
             
@@ -106,14 +122,14 @@ const Dashboard = () => {
                 <BarChart size={24} />
                 <div>
                   <p>Total Trips</p>
-                  <strong>{userData.trips > 0 ? userData.trips : ''}</strong>
+                  <strong>{userData.trips}</strong>
                 </div>
               </div>
               <div className="stat">
                 <Map size={24} />
                 <div>
                   <p>Total Distance</p>
-                  <strong>{userData.distance > 0 ? `${userData.distance} km` : ''}</strong>
+                  <strong>{userData.distance > 0 ? `${userData.distance} km` : '0'}</strong>
                 </div>
               </div>
             </section>
@@ -123,15 +139,15 @@ const Dashboard = () => {
               <ul>
                 <li>
                   <span className="trip-route">Lusaka to Kitwe</span>
-                  <span className="trip-date">May 15, 2023</span>
+                  <span className="trip-date">May 15, 2024</span>
                 </li>
                 <li>
                   <span className="trip-route">Kitwe to Lusaka</span>
-                  <span className="trip-date">May 10, 2023</span>
+                  <span className="trip-date">May 10, 2024</span>
                 </li>
                 <li>
                   <span className="trip-route">Lusaka to Livingstone</span>
-                  <span className="trip-date">April 28, 2023</span>
+                  <span className="trip-date">April 28, 2024</span>
                 </li>
               </ul>
               <button className="view-all-btn">View All Trips</button>
@@ -161,7 +177,7 @@ const Dashboard = () => {
               <li><a href="#">FAQs</a></li>
               <li><a href="#">Terms of Service</a></li>
               <li><a href="#">Privacy Policy</a></li>
-              <li><a href="#">Contact Us</a></li>
+              <li><a href="/contactus">Contact Us</a></li>
             </ul>
           </div>
           <div className="footer-section">

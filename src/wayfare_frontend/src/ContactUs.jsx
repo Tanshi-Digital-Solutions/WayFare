@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { User, Mail, MessageSquare, Send } from 'lucide-react';
+import { User, Mail, MessageSquare, Send, LogOut, Menu } from 'lucide-react';
 import './ContactUs.scss';
 import { useNavigate, Link } from 'react-router-dom';
 import { wayfare_backend } from 'declarations/wayfare_backend';
+import DashboardHeader from './DashboardHeader';
 
 const ContactUs = () => {
   const [name, setName] = useState('');
@@ -10,6 +11,9 @@ const ContactUs = () => {
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,7 +28,9 @@ const ContactUs = () => {
         const nameResult = await wayfare_backend.getUserName(userEmail);
         setUserData({
           name: 'ok' in nameResult ? nameResult.ok : 'User',
+          email: userEmail,
         });
+        setEmail(userEmail); // Pre-fill the email field
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -33,32 +39,45 @@ const ContactUs = () => {
     fetchUserData();
   }, [navigate]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({ name, email, message });
-    setSubmitted(true);
-    setName('');
-    setEmail('');
-    setMessage('');
+    setIsLoading(true);
+    setErrorMessage('');
+
+    try {
+      const result = await wayfare_backend.createMessage(email, name, message);
+      
+      if ('ok' in result) {
+        setSubmitted(true);
+        setName('');
+        setMessage('');
+      } else if ('err' in result) {
+        setErrorMessage(`Error: ${result.err}`);
+      }
+    } catch (error) {
+      setErrorMessage(`An error occurred: ${error.message}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('userEmail');
+    navigate('/');
+  };
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
   };
 
   return (
     <div className="contact-us-page">
-      <header className="dashboard-header">
-        <div className="logo">WayFare</div>
-        <nav>
-          <Link to="/dashboard">Dashboard</Link>
-          <Link to="/booking">Book Trip</Link>
-          <Link to="/mytickets">My Tickets</Link>
-          <Link to="/contactus">Support</Link>
-        </nav>
-        <div className="user-menu">
-          <span>{userData ? userData.name : 'Loading...'}</span>
-          <button className="logout-btn" onClick={() => navigate('/')}>
-            Logout
-          </button>
-        </div>
-      </header>
+      <DashboardHeader
+        userData={userData}
+        handleLogout={handleLogout}
+        toggleMobileMenu={toggleMobileMenu}
+        mobileMenuOpen={mobileMenuOpen}
+      />
       <div className="contact-us-container">
         <h2>Contact Us</h2>
         {submitted ? (
@@ -85,6 +104,7 @@ const ContactUs = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Your Email"
                 required
+                readOnly
               />
             </div>
             <div className="input-group">
@@ -96,12 +116,13 @@ const ContactUs = () => {
                 required
               ></textarea>
             </div>
-            <button type="submit">
-              Send Message
+            <button type="submit" disabled={isLoading}>
+              {isLoading ? 'Sending...' : 'Send Message'}
               <Send size={20} />
             </button>
           </form>
         )}
+        {errorMessage && <div className="error-message">{errorMessage}</div>}
       </div>
     </div>
   );

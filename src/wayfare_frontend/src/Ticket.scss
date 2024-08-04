@@ -55,7 +55,7 @@
 
   .wayfare-logo {
     width: 70px;
-    height: auto;
+    height: 70px;
   }
 }
 
@@ -80,7 +80,7 @@
   text-transform: uppercase;
   background-color: white;
 
-  &.active {
+  &.issued {
     color: #27ae60;
   }
 

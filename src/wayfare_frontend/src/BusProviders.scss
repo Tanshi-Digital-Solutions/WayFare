@@ -1,0 +1,114 @@
+// BusProviders.scss
+
+$primary-color: #3498db;
+$secondary-color: #2ecc71;
+$background-color: #f0f3f5;
+$text-color: #333;
+$card-background: #fff;
+
+.bus-providers {
+  background-color: $background-color;
+  padding: 2rem;
+  font-family: 'Arial', sans-serif;
+
+  h1 {
+    text-align: center;
+    color: $primary-color;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .provider-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+  }
+
+  .provider-card {
+    background-color: $card-background;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 350px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .provider-header {
+      background: linear-gradient(135deg, $primary-color, $secondary-color);
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      h2 {
+        color: white;
+        margin: 0;
+        font-size: 1.2rem;
+      }
+    }
+
+    .provider-logo {
+      width: 80px;
+      height: auto;
+    }
+
+    .provider-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .provider-description {
+      padding: 1rem;
+      font-style: italic;
+      color: $text-color;
+    }
+
+    .provider-features, .provider-facts {
+      padding: 0 1rem 1rem;
+
+      h3 {
+        color: $primary-color;
+        border-bottom: 2px solid $secondary-color;
+        padding-bottom: 0.5rem;
+      }
+
+      ul {
+        list-style-type: none;
+        padding-left: 0;
+
+        li {
+          margin-bottom: 0.5rem;
+          padding-left: 20px;
+          position: relative;
+
+          &::before {
+            content: '✓';
+            color: $secondary-color;
+            position: absolute;
+            left: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .bus-providers {
+    padding: 1rem;
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    .provider-card {
+      width: 100%;
+    }
+  }
+}

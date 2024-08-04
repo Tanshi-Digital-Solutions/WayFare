@@ -1,0 +1,122 @@
+// BusSchedule.scss
+
+$light-blue: #e6f3ff;
+$medium-blue: #b3d9ff;
+$dark-blue: #4d94ff;
+$light-green: #e6ffec;
+$medium-green: #b3ffc9;
+$dark-green: #00cc44;
+
+.bus-schedule {
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, $light-blue, $light-green);
+  min-height: 100vh;
+  padding: 2rem;
+
+  h1 {
+    text-align: center;
+    color: $dark-blue;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+  }
+
+  .schedule-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    max-height: 80vh;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 12px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: $light-blue;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: $medium-blue;
+      border-radius: 6px;
+      border: 3px solid $light-blue;
+    }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid $medium-blue;
+    }
+
+    th {
+      background-color: $dark-blue;
+      color: white;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    tr {
+      &:nth-child(even) {
+        background-color: $light-blue;
+      }
+
+      &:hover {
+        background-color: $medium-green;
+        transition: background-color 0.3s ease;
+      }
+    }
+
+    td {
+      &:nth-child(1) { // Date column
+        font-weight: bold;
+        color: $dark-blue;
+      }
+
+      &:nth-child(4), &:nth-child(5) { // Departure and Arrival columns
+        font-family: 'Courier New', monospace;
+      }
+
+      &:nth-child(6) { // Provider column
+        font-style: italic;
+        color: $dark-green;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .bus-schedule {
+    padding: 1rem;
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    table {
+      font-size: 0.9rem;
+
+      th, td {
+        padding: 0.75rem 0.5rem;
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.bus-schedule {
+  animation: fadeIn 0.5s ease-in;
+}

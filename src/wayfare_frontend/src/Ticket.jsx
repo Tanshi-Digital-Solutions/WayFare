@@ -1,31 +1,42 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
 import { ChevronDown, ChevronUp, Calendar, MapPin, Clock, DollarSign, User, Barcode, ArrowRight } from 'lucide-react';
 import './Ticket.scss';
 import { wayfare_backend } from 'declarations/wayfare_backend';
+import wayLogo from './waylogo.png'; 
+import DashboardHeader from './DashboardHeader';
 
 const StatusBadge = ({ status }) => {
   return <span className={`status-badge ${status.toLowerCase()}`}>{status}</span>;
 };
 
-const Ticket = ({ status = 'Active' }) => {
+const Ticket = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [animate, setAnimate] = useState(false);
   const [userData, setUserData] = useState(null);
-  const location = useLocation();
-  const { ticketCode, bookingDetails, selectedSeat } = location.state;
+  const [ticket, setTicket] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { ticketCode } = useParams();
   const navigate = useNavigate();
+
+  console.log('Ticket component rendered. Ticket code:', ticketCode);
 
   useEffect(() => {
     setAnimate(true);
   }, []);
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchData = async () => {
       try {
+        setLoading(true);
+        console.log('Fetching data...');
+
         const userEmail = localStorage.getItem('userEmail');
         if (!userEmail) {
+          console.log('No user email found. Redirecting to home.');
           navigate('/');
           return;
         }
@@ -34,58 +45,106 @@ const Ticket = ({ status = 'Active' }) => {
         setUserData({
           name: 'ok' in nameResult ? nameResult.ok : 'User',
         });
+        console.log('User data fetched:', nameResult);
+
+        if (ticketCode) {
+          console.log('Fetching ticket info for code:', ticketCode);
+          const ticketResult = await wayfare_backend.getTicketInfo(ticketCode);
+          console.log('Raw ticket result:', ticketResult);
+
+          if ('ok' in ticketResult) {
+            const info = ticketResult.ok;
+            const formattedTicket = {
+              code: ticketCode,
+              providerId: info.providerId || 'Unknown',
+              departLocation: info.departLocation || 'Unknown',
+              destination: info.destination || 'Unknown',
+              distance: info.distance ? `${info.distance} Km` : 'N/A',
+              passengerName: info.passengerName || 'Unknown',
+              price: info.price ? `${info.price} ZMW` : 'N/A',
+              paymentMethod: info.paymentMethod || 'Unknown',
+              departureDateTime: info.departureDateTime || 'N/A',
+              status: info.status || 'Unknown',
+              purchaseTime: info.purchaseTime ? new Date(Number(info.purchaseTime) / 1000000) : null,
+              seat: info.seat || 'N/A',
+            };
+            console.log('Formatted ticket:', formattedTicket);
+            setTicket(formattedTicket);
+          } else {
+            throw new Error('Failed to fetch ticket data');
+          }
+        } else {
+          throw new Error('No ticket code provided');
+        }
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error('Error fetching data:', error);
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchUserData();
-  }, [navigate]);
+    fetchData();
+  }, [navigate, ticketCode]);
 
   const handleBackToDashboard = () => {
     navigate('/dashboard');
   };
 
+  console.log('Current state - Loading:', loading, 'Error:', error, 'Ticket:', ticket);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (!ticket) {
+    return <div>No ticket data available.</div>;
+  }
+  const handleLogout = () => {
+    // Implement logout logic here
+    localStorage.removeItem('userEmail');
+    navigate('/');
+  };
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
   return (
     <div className="ticket-container">
-      <header className="dashboard-header">
-        <div className="logo">WayFare</div>
-        <nav>
-          <Link to="/dashboard">Dashboard</Link>
-          <Link to="/booking">Book Trip</Link>
-          <Link to="/mytickets">My Tickets</Link>
-          <Link to="/contactus">Support</Link>
-        </nav>
-        <div className="user-menu">
-          <span>{userData ? userData.name : 'Loading...'}</span>
-          <button className="logout-btn" onClick={() => navigate('/')}>
-            Logout
-          </button>
-        </div>
-      </header>
+      <DashboardHeader
+        userData={userData}
+        handleLogout={handleLogout}
+        toggleMobileMenu={toggleMobileMenu}
+        mobileMenuOpen={mobileMenuOpen}
+      />
       <div className={`ticket ${animate ? 'animate-in' : ''}`}>
         <div className="ticket-header">
           <div className="wayfare-branding">
             <h1>WayFare</h1>
-            <img src='./waylogo.png' alt="WayFare Logo" className="wayfare-logo" />
+            <img src={wayLogo} alt="WayFare Logo" className="wayfare-logo" />
           </div>
           <div className="provider-info">
-            <h2>{bookingDetails.provider}</h2>
-            <StatusBadge status={status} />
+            <h2>{ticket.providerId}</h2>
+            <StatusBadge status={ticket.status} />
           </div>
         </div>
         <div className="ticket-main">
           <div className="ticket-body">
             <div className="ticket-info">
-              <p><User size={16} /> <strong>Passenger:</strong> {bookingDetails.passenger}</p>
-              <p><MapPin size={16} /> <strong>Route:</strong> {bookingDetails.startLocation} to {bookingDetails.endLocation}</p>
-              <p><Calendar size={16} /> <strong>Departure:</strong> {bookingDetails.departureDate} 08:00 AM</p>
-              <p><ArrowRight size={16} /> <strong>Seat:</strong> {selectedSeat}</p>
-              <p><DollarSign size={16} /> <strong>Price:</strong> ZMW 305</p>
-              <p><Barcode size={16} /> <strong>Ticket Code:</strong> {ticketCode}</p>
+              <p><User size={16} /> <strong>Passenger:</strong> {ticket.passengerName}</p>
+              <p><MapPin size={16} /> <strong>Route:</strong> {ticket.departLocation} to {ticket.destination}</p>
+              <p><Calendar size={16} /> <strong>Departure:</strong> {ticket.departureDateTime}</p>
+              <p><ArrowRight size={16} /> <strong>Seat:</strong> {ticket.seat}</p>
+              <p><DollarSign size={16} /> <strong>Price:</strong> {ticket.price}</p>
+              <p><Barcode size={16} /> <strong>Ticket Code:</strong> {ticket.code}</p>
             </div>
             <div className="ticket-qr">
-              <QRCodeSVG value={ticketCode} size={100} />
+              <QRCodeSVG value={ticket.code} size={100} />
             </div>
           </div>
         </div>
@@ -96,9 +155,9 @@ const Ticket = ({ status = 'Active' }) => {
           </button>
         </div>
         <div className={`expanded-details ${expanded ? 'expanded' : ''}`}>
-          <p><Clock size={16} /> <strong>Time Purchased:</strong> {new Date().toLocaleString()}</p>
-          <p><MapPin size={16} /> <strong>Route Distance:</strong> 417 Km</p>
-          <p><DollarSign size={16} /> <strong>Payment Method:</strong> {bookingDetails.paymentOption}</p>
+          <p><Clock size={16} /> <strong>Time Purchased:</strong> {ticket.purchaseTime ? ticket.purchaseTime.toLocaleString() : 'N/A'}</p>
+          <p><MapPin size={16} /> <strong>Route Distance:</strong> {ticket.distance}</p>
+          <p><DollarSign size={16} /> <strong>Payment Method:</strong> {ticket.paymentMethod}</p>
           <button className="save-wallet-button">Save to Wallet</button>
         </div>
       </div>

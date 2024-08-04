@@ -7,7 +7,7 @@ module {
         var name: Text;
         var accountBalance: Int;
         var pendingDeposits: [PendingDeposit];
-        var trips: Int;
+        var trips: Nat;
         var totalDistance: Nat;
         var email: Text;
         var phone: ?Text;
@@ -15,8 +15,8 @@ module {
         var tickets: ?[Text];
         var password: Text;
         var isLoggedIn: Bool;
-        uniqueCode: Text; // Added
-        var internetIdentity: ?Principal; // Added
+        uniqueCode: Text;
+        var internetIdentity: ?Principal; 
     };
 
     public type Ticket = {
@@ -25,12 +25,15 @@ module {
         departLocation: Text;
         destination: Text;
         distance: Nat;
+        trip: Nat;
         passengerName: Text;
         price: Nat;
         paymentMethod: Text;
         departureDateTime: Text;
         status: Text;
         purchaseTime: Time.Time;
+        seat: Text;
+        userEmail: Text;
     };
 
     public type Provider = {
@@ -51,7 +54,7 @@ module {
         name: Text;
         email: Text;
         password: Text;
-        internetIdentity: Principal;
+        var isAgent: Bool;
         var isLoggedIn: Bool;
     };
 
@@ -63,10 +66,18 @@ module {
         paymentMethods : ?[Text];
         phone : ?Text;
         tickets : ?[Text];
-        trips : Int;
+        trips : Nat;
         totalDistance : Nat;
         isLoggedIn : Bool;
         uniqueCode : Text;
         internetIdentity : ?Principal;
     };
+
+    public type SupportMessage = {
+    id: Text;
+    userEmail: Text;
+    message: Text;
+    timestamp: Time.Time;
+    status: Text; // e.g., "open", "closed", "in progress"
+};
 }

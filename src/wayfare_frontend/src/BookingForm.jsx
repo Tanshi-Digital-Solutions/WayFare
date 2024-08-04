@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, MapPin, Bus, DollarSign, User } from 'lucide-react';
+import { Calendar, MapPin, Bus, DollarSign, User, LogOut, Menu } from 'lucide-react';
 import './BookingForm.scss';
 import { useNavigate, Link } from 'react-router-dom';
 import { wayfare_backend } from 'declarations/wayfare_backend';
+import DashboardHeader from './DashboardHeader';
 
 const BookingForm = () => {
   const [userData, setUserData] = useState(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [formData, setFormData] = useState({
     passenger: '',
     provider: '',
@@ -51,24 +53,24 @@ const BookingForm = () => {
     const email = localStorage.getItem('userEmail');
     navigate('/seatselection', { state: { bookingDetails: formData, email } });
   };
+  const handleLogout = () => {
+    // Implement logout logic here
+    localStorage.removeItem('userEmail');
+    navigate('/');
+  };
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
 
   return (
     <div className="booking-form-page">
-      <header className="dashboard-header">
-        <div className="logo">WayFare</div>
-        <nav>
-          <Link to="/dashboard">Dashboard</Link>
-          <Link to="/booking">Book Trip</Link>
-          <Link to="/mytickets">My Tickets</Link>
-          <Link to="/contactus">Support</Link>
-        </nav>
-        <div className="user-menu">
-          <span>{userData.name}</span>
-          <button className="logout-btn" onClick={() => navigate('/')}>
-            Logout
-          </button>
-        </div>
-      </header>
+      <DashboardHeader
+        userData={userData}
+        handleLogout={handleLogout}
+        toggleMobileMenu={toggleMobileMenu}
+        mobileMenuOpen={mobileMenuOpen}
+      />
       <div className="booking-form-container">
         <form className="booking-form" onSubmit={handleSubmit}>
           <h2>Book Your Trip</h2>

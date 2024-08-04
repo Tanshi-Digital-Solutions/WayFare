@@ -5,6 +5,7 @@ $text-color: #333;
 $header-height: 60px;
 $footer-height: 200px;
 $sidebar-width: 200px;
+$breakpoint-mobile: 768px;
 
 body, html {
   margin: 0;
@@ -38,6 +39,17 @@ body, html {
       font-size: 24px;
       font-weight: bold;
     }
+    .mobile-menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+
+      @media (max-width: $breakpoint-mobile) {
+        display: block;
+      }
+    }
 
     nav {
       display: flex;
@@ -54,12 +66,33 @@ body, html {
           background-color: darken($primary-color, 10%);
         }
       }
+
+      @media (max-width: $breakpoint-mobile) {
+        display: none;
+
+        &.mobile-nav-open {
+          display: flex;
+          flex-direction: column;
+          position: absolute;
+          top: $header-height;
+          left: 0;
+          right: 0;
+          background-color: $primary-color;
+          padding: 10px;
+        }
+      }
+
     }
 
     .user-menu {
       display: flex;
       align-items: center;
       gap: 10px;
+
+      @media (max-width: $breakpoint-mobile) {
+        display: none;
+      }
+
     }
   }
 
@@ -67,6 +100,28 @@ body, html {
     display: flex;
     flex-grow: 1;
     margin-top: $header-height;
+
+    .sidebar-toggle {
+      display: none;
+      position: fixed;
+      top: $header-height + 10px;
+      left: 10px;
+      z-index: 1000;
+      background-color: $primary-color;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+
+      @media (max-width: $breakpoint-mobile) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
   }
 
   &__sidebar {
@@ -96,12 +151,28 @@ body, html {
         }
       }
     }
+
+    @media (max-width: $breakpoint-mobile) {
+      position: fixed;
+      left: -$sidebar-width;
+      top: $header-height;
+      bottom: 0;
+      transition: left 0.3s ease;
+      z-index: 999;
+
+      &.sidebar-open {
+        left: 0;
+      }
+    }
   }
 
   &__main {
     flex-grow: 1;
     padding: 20px;
     overflow-y: auto;
+    @media (max-width: $breakpoint-mobile) {
+      margin-left: 0;
+    }
   }
 
   &__footer {
@@ -170,6 +241,9 @@ body, html {
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
   margin-bottom: 20px;
+  @media (max-width: $breakpoint-mobile) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .user-profile, .account-balance, .travel-stats, .recent-trips {
