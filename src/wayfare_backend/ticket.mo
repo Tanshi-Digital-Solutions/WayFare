@@ -5,6 +5,7 @@ import TrieMap "mo:base/TrieMap";
 import Text "mo:base/Text";
 import Int "mo:base/Int";
 import Time "mo:base/Time";
+import Iter "mo:base/Iter";
 import Types "types";
 
 module {
@@ -16,6 +17,10 @@ module {
     public class Ticket(mainInterface : MainInterface) {
         private let ticketMap = TrieMap.TrieMap<Text, Types.Ticket>(Text.equal, Text.hash);
         private var ticketCounter : Nat = 0;
+
+        public func getAllTickets() : async [Types.Ticket] {
+            Iter.toArray(ticketMap.vals())
+        };
 
         private func generateTicketCode() : Text {
             ticketCounter += 1;
@@ -116,4 +121,6 @@ module {
             }
         };
     };
+
+    
 }

@@ -45,7 +45,7 @@ const ContactUs = () => {
     setErrorMessage('');
 
     try {
-      const result = await wayfare_backend.createMessage(email, name, message);
+      const result = await wayfare_backend.addSupportMessage(email, message);
       
       if ('ok' in result) {
         setSubmitted(true);

@@ -199,7 +199,7 @@
   }
 }
 
-.save-wallet-button {
+.download-button {
   margin-top: 20px;
   background-color: #3498db;
   color: white;
@@ -209,9 +209,16 @@
   cursor: pointer;
   font-size: 16px;
   font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: background-color 0.3s ease;
 
   &:hover {
     background-color: #2980b9;
+  }
+
+  svg {
+    margin-right: 8px;
   }
 }

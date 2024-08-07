@@ -13,21 +13,27 @@ import Principal "mo:base/Principal";
 actor Main {
     private let userMap = TrieMap.TrieMap<Text, Types.User>(Text.equal, Text.hash);
     private let agentMap = TrieMap.TrieMap<Text, Types.Agent>(Text.equal, Text.hash);
-    private let supportMessages = TrieMap.TrieMap<Text, Types.SupportMessage>(Text.equal, Text.hash);
+    private let supportMessages = TrieMap.TrieMap<Text, [Types.SupportMessage]>(Text.equal, Text.hash);
 
     public shared(msg) func addSupportMessage(userEmail: Text, message: Text) : async Result.Result<Text, Text> {
-        let id = generateUniqueCode();
         let newMessage : Types.SupportMessage = {
-            id = id;
             userEmail = userEmail;
             message = message;
             timestamp = Time.now();
-            status = "open";
         };
-        supportMessages.put(id, newMessage);
-        #ok(id)
+    
+        switch (supportMessages.get(userEmail)) {
+            case (null) {
+                supportMessages.put(userEmail, [newMessage]);
+            };
+            case (?existingMessages) {
+                let updatedMessages = Array.append(existingMessages, [newMessage]);
+                supportMessages.put(userEmail, updatedMessages);
+            };
+        };
+    
+        #ok(userEmail)
     };
-
     
 
     public shared(msg) func getUser(userUniqueCode: Text) : async Result.Result<Types.ShareableUser, Text> {
@@ -95,7 +101,7 @@ actor Main {
 
     private let ticketSystem = Ticket.Ticket(mainInterface);
 
-    public func createUser(name: Text, email: Text, password: Text) : async Result.Result<Text, Text> {
+    public shared(msg) func createUser(name: Text, email: Text, password: Text) : async Result.Result<Text, Text> {
         switch (userMap.get(email)) {
             case (null) {
                 let uniqueCode = generateUniqueCode();
@@ -110,12 +116,41 @@ actor Main {
                     var tickets = ?[];
                     var trips = 0;
                     var totalDistance = 0;
-                    var isLoggedIn = false;
+                    var isLoggedIn = true;
                     uniqueCode = uniqueCode;
                     var internetIdentity = null;
                 };
                 userMap.put(email, newUser);
                 #ok("User created successfully")
+            };
+            case (?_) {
+                #err("User with this email already exists")
+            };
+        };
+    };
+
+    public shared(msg) func createUserWithInternetIdentity(name: Text, email: Text) : async Result.Result<Text, Text>{
+        let caller = msg.caller;
+        switch (userMap.get(email)) {
+            case (null) {
+            let uniqueCode = generateUniqueCode();
+            let newUser: Types.User = {
+                var name = name;
+                var email = email;
+                var password = ""; // No password for II users
+                var accountBalance = 1220;
+                var pendingDeposits = [];
+                var paymentMethods = ?["MTN", "Airtel"];
+                var phone = ?"0";
+                var tickets = ?[];
+                var trips = 0;
+                var totalDistance = 0;
+                var isLoggedIn = true; // Set to true immediately
+                uniqueCode = uniqueCode;
+                var internetIdentity = ?caller;
+            };
+            userMap.put(email, newUser);
+            #ok("User created successfully")
             };
             case (?_) {
                 #err("User with this email already exists")
@@ -141,6 +176,37 @@ actor Main {
                     user.isLoggedIn := true;
                     userMap.put(email, user);
                     #ok("Logged in successfully")
+                } else {
+                    #err("Incorrect password")
+                };
+            };
+            case (null) {
+                #err("User not found")
+            };
+        };
+    };
+
+    public shared(msg) func loginWithInternetIdentity() : async Result.Result<Text, Text> {
+    let caller = msg.caller;
+    switch (getUserByPrincipal(caller)) {
+        case (?user) {
+            user.isLoggedIn := true;
+            userMap.put(user.email, user);
+            #ok("Logged in successfully")
+        };
+        case (null) {
+            #err("No user found for this Internet Identity")
+        };
+    };
+};
+
+    public shared(msg) func linkInternetIdentity(email: Text, password: Text) : async Result.Result<Text, Text> {
+        switch (findUserByEmail(email)) {
+            case (?user) {
+                if (user.password == password) {
+                    user.internetIdentity := ?msg.caller;
+                    userMap.put(email, user);
+                    #ok("Internet Identity linked successfully")
                 } else {
                     #err("Incorrect password")
                 };
@@ -359,7 +425,6 @@ actor Main {
             
                     // Deduct the ticket price from the user's balance
                     user.accountBalance -= price;
-                    user.trips += 1;
             
                     // Create ticket using the Ticket canister
                     let ticketResult = await ticketSystem.createTicket(
@@ -452,7 +517,17 @@ actor Main {
         })
     };
     public query func getAllSupportMessages() : async [Types.SupportMessage] {
-        Iter.toArray(supportMessages.vals())
+        var allMessages : [Types.SupportMessage] = [];
+        for (messages in supportMessages.vals()) {
+            allMessages := Array.append(allMessages, messages);
+        };
+        allMessages
     };
+
+    public func getAllTickets() : async [Types.Ticket] {
+        await ticketSystem.getAllTickets()
+    }
+
+    
 
 };

@@ -10,39 +10,38 @@ const busProviders = ['Power Tools', 'UBZ', 'Likili Mt'];
 const departureTimes = ['05:00', '07:00', '11:00', '14:00'];
 
 
-const generateSchedule = () => {
+const generateSchedule = (numItems) => {
   const schedule = [];
   const startDate = new Date('2024-08-01');
-  const endDate = new Date('2024-09-30');
 
-  for (let date = startDate; date <= endDate; date.setDate(date.getDate() + 1)) {
-    for (let i = 0; i < cities.length; i++) {
-      for (let j = 0; j < cities.length; j++) {
-        if (i !== j) {
-          departureTimes.forEach(depTime => {
-            const arrivalHours = Math.floor(Math.random() * (12 - 5 + 1)) + 5;
-            const departureDate = new Date(date);
-            departureDate.setHours(depTime.split(':')[0], depTime.split(':')[1]);
-            const arrivalDate = new Date(departureDate.getTime() + arrivalHours * 60 * 60 * 1000);
-            
-            schedule.push({
-              date: date.toISOString().split('T')[0],
-              from: cities[i],
-              to: cities[j],
-              departureTime: depTime,
-              arrivalTime: `${arrivalDate.getHours().toString().padStart(2, '0')}:${arrivalDate.getMinutes().toString().padStart(2, '0')}`,
-              provider: busProviders[Math.floor(Math.random() * busProviders.length)]
-            });
-          });
-        }
-      }
+  for (let k = 0; k < numItems; k++) {
+    const date = new Date(startDate);
+    date.setDate(date.getDate() + Math.floor(Math.random() * 60)); // Random date within the 2-month range
+    const fromIndex = Math.floor(Math.random() * cities.length);
+    let toIndex = Math.floor(Math.random() * cities.length);
+    while (toIndex === fromIndex) {
+      toIndex = Math.floor(Math.random() * cities.length);
     }
+    const depTime = departureTimes[Math.floor(Math.random() * departureTimes.length)];
+    const arrivalHours = Math.floor(Math.random() * (12 - 5 + 1)) + 5;
+    const departureDate = new Date(date);
+    departureDate.setHours(depTime.split(':')[0], depTime.split(':')[1]);
+    const arrivalDate = new Date(departureDate.getTime() + arrivalHours * 60 * 60 * 1000);
+    
+    schedule.push({
+      date: date.toISOString().split('T')[0],
+      from: cities[fromIndex],
+      to: cities[toIndex],
+      departureTime: depTime,
+      arrivalTime: `${arrivalDate.getHours().toString().padStart(2, '0')}:${arrivalDate.getMinutes().toString().padStart(2, '0')}`,
+      provider: busProviders[Math.floor(Math.random() * busProviders.length)]
+    });
   }
   return schedule;
 };
 
 const BusSchedule = () => {
-  const schedule = generateSchedule();
+  const schedule = generateSchedule(30);
   const [userData, setUserData] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();

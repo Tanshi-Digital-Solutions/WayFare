@@ -6,6 +6,8 @@ import { wayfare_backend } from 'declarations/wayfare_backend';
 
 const Dashboard = () => {
   const [userData, setUserData] = useState(null);
+  const [recentTrips, setRecentTrips] = useState([]);
+  const [upcomingTrips, setUpcomingTrips] = useState([]);
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -30,9 +32,50 @@ const Dashboard = () => {
       setUserData({
         name: 'ok' in nameResult ? nameResult.ok : 'User',
         balance: 'ok' in balanceResult ? balanceResult.ok : 0,
-        trips: 'ok' in tripsResult ? tripsResult.ok : 0,
+        trip: 'ok' in tripsResult ? tripsResult.ok : 0,
         distance: 'ok' in distanceResult ? distanceResult.ok : 0
       });
+
+      // Fetch user's tickets
+      const ticketCodesResult = await wayfare_backend.getUserTickets(userEmail);
+      const ticketCodes = 'ok' in ticketCodesResult ? ticketCodesResult.ok : [];
+
+      if (Array.isArray(ticketCodes) && ticketCodes.length > 0) {
+        const ticketPromises = ticketCodes.map(code => wayfare_backend.getTicketInfo(code));
+        const ticketInfos = await Promise.all(ticketPromises);
+
+        const formattedTickets = ticketInfos.map((result, index) => {
+          const info = result.ok || {};
+          
+          // Convert Motoko time (nanoseconds) to JavaScript time (milliseconds)
+          const convertTime = (timeNs) => {
+            if (!timeNs) return null;
+            return new Date(Number(timeNs) / 1000000);
+          };
+
+          return {
+            code: ticketCodes[index] || 'Unknown',
+            departLocation: info.departLocation || 'Unknown',
+            destination: info.destination || 'Unknown',
+            departureDateTime: convertTime(info.departureDateTime),
+            status: info.status || 'Unknown',
+          };
+        });
+
+        const now = new Date();
+        const recent = formattedTickets
+          .filter(ticket => ticket.status === 'used' && ticket.departureDateTime && ticket.departureDateTime <= now)
+          .sort((a, b) => b.departureDateTime - a.departureDateTime)
+          .slice(0, 3);
+
+        const upcoming = formattedTickets
+          .filter(ticket => ticket.status === 'issued' && ticket.departureDateTime && ticket.departureDateTime > now)
+          .sort((a, b) => a.departureDateTime - b.departureDateTime)
+          .slice(0, 3);
+
+        setRecentTrips(recent);
+        setUpcomingTrips(upcoming);
+      }
     } catch (error) {
       console.error('Error fetching user data:', error);
     }
@@ -43,10 +86,6 @@ const Dashboard = () => {
     navigate('/');
   };
 
-  if (!userData) {
-    return <div>Loading...</div>;
-  }
-
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
@@ -54,6 +93,10 @@ const Dashboard = () => {
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
+
+  if (!userData) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="dashboard">
@@ -79,15 +122,15 @@ const Dashboard = () => {
       
       <div className="dashboard__content">
         <button className="sidebar-toggle" onClick={toggleSidebar}>
-          <Menu size={20} />
+          <Menu size={24} />
         </button>
         <aside className={`dashboard__sidebar ${sidebarOpen ? 'sidebar-open' : ''}`}>
           <nav>
-            <a href="/dashboard" className="active"><Home size={20} /> Home</a>
-            <a href="/providers"><BusFront size={20} /> Providers</a>
-            <a href="/schedule"><Clock size={20} /> Schedule</a>
-            <a href="#"><Settings size={20} /> Settings</a>
-            <a href="/contactus"><HelpCircle size={20} /> Help</a>
+            <Link to="/dashboard" className="active"><Home size={20} /> Home</Link>
+            <Link to="/providers"><BusFront size={20} /> Providers</Link>
+            <Link to="/schedule"><Clock size={20} /> Schedule</Link>
+            <Link to="/settings"><Settings size={20} /> Settings</Link>
+            <Link to="/contactus"><HelpCircle size={20} /> Help</Link>
           </nav>
         </aside>
         
@@ -122,7 +165,7 @@ const Dashboard = () => {
                 <BarChart size={24} />
                 <div>
                   <p>Total Trips</p>
-                  <strong>{userData.trips}</strong>
+                  <strong>{userData.distance > 0 ? `${userData.trip}` : '0'}</strong>
                 </div>
               </div>
               <div className="stat">
@@ -137,29 +180,38 @@ const Dashboard = () => {
             <section className="recent-trips">
               <h3>Recent Trips</h3>
               <ul>
-                <li>
-                  <span className="trip-route">Lusaka to Kitwe</span>
-                  <span className="trip-date">May 15, 2024</span>
-                </li>
-                <li>
-                  <span className="trip-route">Kitwe to Lusaka</span>
-                  <span className="trip-date">May 10, 2024</span>
-                </li>
-                <li>
-                  <span className="trip-route">Lusaka to Livingstone</span>
-                  <span className="trip-date">April 28, 2024</span>
-                </li>
+                {recentTrips.map((trip, index) => (
+                  <li key={index}>
+                    <span className="trip-route">{trip.departLocation} to {trip.destination}</span>
+                    <span className="trip-date">{trip.departureDateTime.toLocaleDateString()}</span>
+                  </li>
+                ))}
               </ul>
-              <button className="view-all-btn">View All Trips</button>
+              {recentTrips.length === 0 && <p>No recent trips.</p>}
+              <Link to="/mytickets" className="view-all-btn">View All Trips</Link>
+            </section>
+
+            <section className="upcoming-trips">
+              <h3>Upcoming Trips</h3>
+              <ul>
+                {upcomingTrips.map((trip, index) => (
+                  <li key={index}>
+                    <span className="trip-route">{trip.departLocation} to {trip.destination}</span>
+                    <span className="trip-date">{trip.departureDateTime.toLocaleDateString()}</span>
+                  </li>
+                ))}
+              </ul>
+              {upcomingTrips.length === 0 && <p>No upcoming trips.</p>}
+              <Link to="/mytickets" className="view-all-btn">View All Trips</Link>
             </section>
           </div>
           
           <section className="quick-actions">
             <h3>Quick Actions</h3>
             <div className="action-buttons">
-              <button className="action-btn"><Book size={20} /> Book a Trip</button>
-              <button className="action-btn"><Clock size={20} /> View Schedule</button>
-              <button className="action-btn"><Settings size={20} /> Manage Account</button>
+              <Link to="/mytickets" className="view-all-btn"><Book size={20} /> Book a Trip</Link>
+              <Link to="/mytickets" className="view-all-btn"><Clock size={20} /> View Schedule</Link>
+              <Link to="/mytickets" className="view-all-btn"><Settings size={20} /> Manage Account</Link>
             </div>
           </section>
         </main>

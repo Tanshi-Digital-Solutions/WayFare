@@ -74,10 +74,9 @@ module {
     };
 
     public type SupportMessage = {
-    id: Text;
-    userEmail: Text;
-    message: Text;
-    timestamp: Time.Time;
-    status: Text; // e.g., "open", "closed", "in progress"
-};
+        
+        userEmail: Text;
+        message: Text;
+        timestamp: Time.Time;
+    };
 }

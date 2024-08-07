@@ -133,3 +133,68 @@
 .notification.error {
   background-color: #F44336; /* Red */
 }
+
+.alternative-login {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.internet-identity-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  background-color: #29abe2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  width: 100%;
+
+  img {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+  }
+}
+
+.toggle-action {
+  margin-top: 20px;
+  text-align: center;
+  color: #29abe2;
+  cursor: pointer;
+}
+
+
+.loader {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #3498db;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.submit:disabled,
+.internet-identity-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.submit,
+.internet-identity-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.error {
+  color: red;
+  font-size: 0.8em;
+  margin-top: 5px;
+}

@@ -1,16 +1,20 @@
-
 import './BusProviders.scss';
 import DashboardHeader from './DashboardHeader';
 import React, { useState, useEffect } from 'react';
 import { wayfare_backend } from 'declarations/wayfare_backend';
 import { useNavigate, Link } from 'react-router-dom';
-
+import powLogo from './powerlogo.jpeg';
+import pow from './powlogo.png';
+import likLogo from './liklogo.jpg';
+import lik from './lik2.png';
+import ubzLogo from './ubzlogo.png';
+import ubz from './ubz.png';
 
 const busProviders = [
   {
     name: 'Power Tools Coach Services',
-    logo: 'https://placehold.co/200x100?text=Power+Tools',
-    image: 'https://placehold.co/600x400?text=Power+Tools+Bus',
+    logo: powLogo,
+    image: pow,
     features: [
       'USB Ports in every seat',
       'Reclining seats with extra legroom',
@@ -28,8 +32,8 @@ const busProviders = [
   },
   {
     name: 'Likili Motors',
-    logo: 'https://placehold.co/200x100?text=Likili+Motors',
-    image: 'https://placehold.co/600x400?text=Likili+Motors+Bus',
+    logo: likLogo,
+    image: lik,
     features: [
       'Free high-speed Wi-Fi',
       'Spacious seating arrangement',
@@ -47,8 +51,8 @@ const busProviders = [
   },
   {
     name: 'United Bus Services Zambia (UBZ)',
-    logo: 'https://placehold.co/200x100?text=UBZ',
-    image: 'https://placehold.co/600x400?text=UBZ+Bus',
+    logo: ubzLogo,
+    image: ubz,
     features: [
       'Portable toilet facilities',
       'Extra-wide seats',

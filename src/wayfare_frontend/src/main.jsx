@@ -12,6 +12,9 @@ import ContactUs from './ContactUs';
 import Deposit from './Deposit';
 import Schedule from './Schedule';
 import Providers from './Providers';
+import AdminLogin from './AdminLogin';
+import AdminDashboard from './AdminDashboard';
+import LinkII from './Users';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -27,6 +30,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/deposit" element={<Deposit />} />
         <Route path="/schedule" element={<Schedule />} />
         <Route path="/providers" element={<Providers />} />
+        <Route path="/link-identity" element={<LinkII />} />
+        <Route path="/admin-login" element={<AdminLogin />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,

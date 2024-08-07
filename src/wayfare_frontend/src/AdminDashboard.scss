@@ -1,0 +1,172 @@
+$light-blue: #e6f3ff;
+$dark-blue: #3498db;
+$light-green: #e6fff2;
+$dark-green: #2ecc71;
+$dark-red: #cc402e;
+
+.admin-dashboard {
+  background-color: $light-blue;
+  min-height: 100vh;
+  padding: 2rem;
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+
+    h1 {
+      color: $dark-blue;
+    }
+
+    button {
+      background-color: $dark-green;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: darken($dark-green, 10%);
+      }
+    }
+  }
+
+  .dashboard-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+
+    section {
+      background-color: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+      h2 {
+        color: $dark-blue;
+        margin-bottom: 1rem;
+      }
+
+      ul {
+        list-style-type: none;
+        padding: 0;
+
+        li {
+          margin-bottom: 0.5rem;
+          padding: 0.5rem;
+          background-color: $light-green;
+          border-radius: 4px;
+        }
+      }
+    }
+
+    .ticket-validation,
+    .ticket-info {
+      form {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+
+        input {
+          flex-grow: 1;
+          padding: 0.5rem;
+          border: 1px solid $dark-blue;
+          border-radius: 4px;
+        }
+
+        button {
+          background-color: $dark-green;
+          color: white;
+          border: none;
+          padding: 0.5rem 1rem;
+          border-radius: 4px;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+
+          &:hover {
+            background-color: darken($dark-green, 10%);
+          }
+        }
+      }
+
+      .validation-result,
+      .ticket-info-result {
+        padding: 0.5rem;
+        background-color: $light-green;
+        border-radius: 4px;
+        text-align: center;
+
+        h3 {
+          color: $dark-blue;
+          margin-bottom: 0.5rem;
+        }
+
+        p {
+          margin: 0.25rem 0;
+        }
+      }
+    }
+    .support-messages {
+      background-color: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+      h2 {
+        color: $dark-blue;
+        margin-bottom: 1rem;
+      }
+
+      ul {
+        list-style-type: none;
+        padding: 0;
+
+        li {
+          margin-bottom: 1rem;
+          padding: 1rem;
+          background-color: $light-green;
+          border-radius: 4px;
+
+          p {
+            margin: 0.5rem 0;
+          }
+
+          strong {
+            color: $dark-blue;
+          }
+        }
+      }
+    }
+  }
+
+  .qr-scanner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  
+    button {
+      margin-top: 1rem;
+      background-color: $dark-red;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+  
+      &:hover {
+        background-color: darken($dark-red, 10%);
+      }
+    }
+  }
+}

@@ -10,6 +10,10 @@
         "wayfare_backend"
         
       ],
+      "internet_identity": {
+      "type": "pull",
+      "id": "qoctq-giaaa-aaaaa-aaaea-cai"  
+    },
       "source": [
         "src/wayfare_frontend/dist"
       ],

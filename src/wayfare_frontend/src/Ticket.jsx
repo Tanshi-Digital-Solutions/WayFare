@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
-import { ChevronDown, ChevronUp, Calendar, MapPin, Clock, DollarSign, User, Barcode, ArrowRight } from 'lucide-react';
+import { ChevronDown, ChevronUp, Calendar, MapPin, Clock, DollarSign, User, Barcode, ArrowRight, Download  } from 'lucide-react';
 import './Ticket.scss';
 import { wayfare_backend } from 'declarations/wayfare_backend';
 import wayLogo from './waylogo.png'; 
 import DashboardHeader from './DashboardHeader';
+import { toPng } from 'html-to-image';
+import { jsPDF } from 'jspdf';
 
 const StatusBadge = ({ status }) => {
   return <span className={`status-badge ${status.toLowerCase()}`}>{status}</span>;
@@ -20,7 +22,9 @@ const Ticket = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { ticketCode } = useParams();
+  const [isElementLoaded, setIsElementLoaded] = useState(false);
   const navigate = useNavigate();
+  const ticketRef = useRef(null);
 
   console.log('Ticket component rendered. Ticket code:', ticketCode);
 
@@ -91,6 +95,59 @@ const Ticket = () => {
     navigate('/dashboard');
   };
 
+  const handleLogout = () => {
+    // Implement logout logic here
+    localStorage.removeItem('userEmail');
+    navigate('/');
+  };
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const handleDownload = async () => {
+    if (!ticketRef.current) {
+      console.error('Ticket element not found');
+      alert('Unable to generate ticket. Please try again.');
+      return;
+    }
+
+    try {
+      // Generate PNG
+      const dataUrl = await toPng(ticketRef.current, { quality: 0.95 });
+      
+      // Download PNG
+      const pngLink = document.createElement('a');
+      pngLink.href = dataUrl;
+      pngLink.download = 'ticket.png';
+      document.body.appendChild(pngLink);
+      pngLink.click();
+      document.body.removeChild(pngLink);
+
+      // Generate and download PDF
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgProps = pdf.getImageProperties(dataUrl);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      pdf.addImage(dataUrl, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save('ticket.pdf');
+    } catch (error) {
+      console.error('Error generating ticket:', error);
+      alert('An error occurred while generating the ticket. Please try again.');
+    }
+  };
+
+  useEffect(() => {
+    // Set a delay to ensure the element is rendered
+    const timer = setTimeout(() => {
+      setIsElementLoaded(true);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  
+
   console.log('Current state - Loading:', loading, 'Error:', error, 'Ticket:', ticket);
 
   if (loading) {
@@ -104,15 +161,6 @@ const Ticket = () => {
   if (!ticket) {
     return <div>No ticket data available.</div>;
   }
-  const handleLogout = () => {
-    // Implement logout logic here
-    localStorage.removeItem('userEmail');
-    navigate('/');
-  };
-
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
-  };
 
   return (
     <div className="ticket-container">
@@ -122,7 +170,7 @@ const Ticket = () => {
         toggleMobileMenu={toggleMobileMenu}
         mobileMenuOpen={mobileMenuOpen}
       />
-      <div className={`ticket ${animate ? 'animate-in' : ''}`}>
+      <div className={`ticket ${animate ? 'animate-in' : ''}`} ref={ticketRef}>
         <div className="ticket-header">
           <div className="wayfare-branding">
             <h1>WayFare</h1>
@@ -158,7 +206,9 @@ const Ticket = () => {
           <p><Clock size={16} /> <strong>Time Purchased:</strong> {ticket.purchaseTime ? ticket.purchaseTime.toLocaleString() : 'N/A'}</p>
           <p><MapPin size={16} /> <strong>Route Distance:</strong> {ticket.distance}</p>
           <p><DollarSign size={16} /> <strong>Payment Method:</strong> {ticket.paymentMethod}</p>
-          <button className="save-wallet-button">Save to Wallet</button>
+          <button className="download-button" onClick={handleDownload} disabled={loading || !ticket}>
+            <Download size={16} /> Download Ticket (PNG & PDF)
+          </button>
         </div>
       </div>
     </div>

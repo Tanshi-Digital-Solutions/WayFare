@@ -4,7 +4,7 @@ $background-color: #f4f4f4;
 $text-color: #333;
 $header-height: 60px;
 $footer-height: 200px;
-$sidebar-width: 200px;
+$sidebar-width: 250px;
 $breakpoint-mobile: 768px;
 
 body, html {
@@ -33,7 +33,7 @@ body, html {
     top: 0;
     left: 0;
     right: 0;
-    z-index: 1000;
+    z-index: 1001;
 
     .logo {
       font-size: 24px;
@@ -100,13 +100,14 @@ body, html {
     display: flex;
     flex-grow: 1;
     margin-top: $header-height;
+    position: relative;
 
     .sidebar-toggle {
       display: none;
       position: fixed;
       top: $header-height + 10px;
       left: 10px;
-      z-index: 1000;
+      z-index: 1001;
       background-color: $primary-color;
       color: white;
       border: none;
@@ -129,6 +130,14 @@ body, html {
     background-color: white;
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    height: calc(100vh - #{$header-height});
+    overflow-y: auto;
+    position: fixed;
+    top: $header-height;
+    left: 0;
+    z-index: 1000;
+    transition: transform 0.3s ease;
+    padding-top: $header-height + 20px; 
 
     nav {
       display: flex;
@@ -153,15 +162,10 @@ body, html {
     }
 
     @media (max-width: $breakpoint-mobile) {
-      position: fixed;
-      left: -$sidebar-width;
-      top: $header-height;
-      bottom: 0;
-      transition: left 0.3s ease;
-      z-index: 999;
+      transform: translateX(-100%);
 
       &.sidebar-open {
-        left: 0;
+        transform: translateX(0);
       }
     }
   }
@@ -170,8 +174,12 @@ body, html {
     flex-grow: 1;
     padding: 20px;
     overflow-y: auto;
+    margin-left: $sidebar-width;
+    padding-top: 20px;
+
     @media (max-width: $breakpoint-mobile) {
       margin-left: 0;
+      width: 100%;
     }
   }
 
@@ -220,6 +228,18 @@ body, html {
       margin-top: 20px;
       padding-top: 20px;
       border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  }
+}
+
+@media (min-width: 769px) {
+  .dashboard {
+    &__content {
+      margin-left: $sidebar-width;
+    }
+
+    &__main {
+      width: calc(100% - #{$sidebar-width});
     }
   }
 }
@@ -338,7 +358,17 @@ body, html {
   }
 }
 
-.recent-trips {
+.recent-trips, .upcoming-trips {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  h3 {
+    margin-top: 0;
+    color: $primary-color;
+  }
+
   ul {
     list-style-type: none;
     padding: 0;
@@ -372,6 +402,8 @@ body, html {
     cursor: pointer;
     margin-top: 10px;
     transition: background-color 0.3s ease;
+    display: inline-block;
+    text-decoration: none;
 
     &:hover {
       background-color: darken($primary-color, 10%);
