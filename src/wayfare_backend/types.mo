@@ -1,4 +1,4 @@
-// types.mo
+// types.mo wayfare
 import Text "mo:base/Text";
 import Time "mo:base/Time";
 
@@ -74,7 +74,6 @@ module {
     };
 
     public type SupportMessage = {
-        
         userEmail: Text;
         message: Text;
         timestamp: Time.Time;

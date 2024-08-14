@@ -1,4 +1,4 @@
-// Ticket.mo
+// Ticket.mo Wayfare
 import Nat "mo:base/Nat";
 import Result "mo:base/Result";
 import TrieMap "mo:base/TrieMap";

@@ -1,4 +1,4 @@
-// main.mo
+// main.mo wayfare
 import Types "types";
 import Ticket "ticket";
 import TrieMap "mo:base/TrieMap";
