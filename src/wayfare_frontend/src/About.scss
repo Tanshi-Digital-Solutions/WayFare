@@ -1,0 +1,282 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+$primary-color: #3498db;
+$secondary-color: #2c3e50;
+$accent-color: #e74c3c;
+$background-color: #ecf0f1;
+$text-color: #333;
+
+// Mixins
+@mixin flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  @mixin section-padding {
+    padding: 4rem 0;
+  }
+  
+  // Global Styles
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    color: $text-color;
+    
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  
+  // Navbar
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: transparent;
+    transition: background-color 0.3s ease;
+    z-index: 1000;
+  
+    &.scrolled {
+      background-color: rgba($secondary-color, 0.9);
+    }
+  
+    .navbar-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+    }
+  
+    .logo {
+      height: 50px;
+    }
+  
+    .nav-menu {
+      display: flex;
+      list-style: none;
+  
+      li {
+        margin-left: 2rem;
+  
+        a {
+          color: #fff;
+          text-decoration: none;
+          font-weight: 600;
+          transition: color 0.3s ease;
+  
+          &:hover {
+            color: $accent-color;
+          }
+        }
+      }
+    }
+  
+    .menu-icon {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+  
+      span {
+        width: 25px;
+        height: 3px;
+        background-color: #fff;
+        margin: 2px 0;
+        transition: 0.4s;
+      }
+  
+      &.open {
+        span:nth-child(1) {
+          transform: rotate(-45deg) translate(-5px, 6px);
+        }
+        span:nth-child(2) {
+          opacity: 0;
+        }
+        span:nth-child(3) {
+          transform: rotate(45deg) translate(-5px, -6px);
+        }
+      }
+    }
+  }
+  
+
+.about-page {
+  .about-header {
+    background: linear-gradient(rgba($secondary-color, 0.7), rgba($secondary-color, 0.7)),
+                url('./Assets/Hero2.png') no-repeat center center/cover;
+    
+    text-align: center;
+    padding: 100px 0;
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: $text-color;
+    }
+
+    p {
+      font-size: 1.2rem;
+      color: $text-color;
+    }
+  }
+
+  section {
+    padding: 4rem 0;
+
+    h2 {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: $primary-color;
+    }
+
+    p {
+      max-width: 800px;
+      margin: 0 auto 2rem;
+      text-align: center;
+    }
+  }
+
+  .about-features {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    .feature {
+      flex-basis: calc(33.333% - 2rem);
+      text-align: center;
+      margin-bottom: 2rem;
+
+      img {
+        width: 100%;
+        max-width: 200px;
+        height: auto;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+      }
+
+      h3 {
+        color: $secondary-color;
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
+
+  .about-tanshi {
+    background-color: #f8f9fa;
+
+    .tanshi-vision {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+
+      img {
+        width: 40%;
+        border-radius: 10px;
+      }
+
+      .vision-content {
+        flex: 1;
+
+        h3 {
+          color: $secondary-color;
+          margin-bottom: 1rem;
+        }
+
+        p {
+          text-align: left;
+          margin: 0;
+        }
+      }
+    }
+  }
+
+  .web3-advantage {
+    .advantage-list {
+      max-width: 800px;
+      margin: 0 auto;
+      list-style-type: none;
+      padding: 0;
+
+      li {
+        position: relative;
+        padding-left: 30px;
+        margin-bottom: 1rem;
+
+        &::before {
+          content: '✓';
+          position: absolute;
+          left: 0;
+          color: $primary-color;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+  .cta-section {
+    background-color: $secondary-color;
+    color: #fff;
+    text-align: center;
+
+    h2, p {
+      color: $text-color;
+    }
+
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2rem;
+
+      .cta-button {
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        background-color: $accent-color;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: darken($accent-color, 10%);
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .about-page {
+    .about-features {
+      .feature {
+        flex-basis: 100%;
+      }
+    }
+
+    .about-tanshi {
+      .tanshi-vision {
+        flex-direction: column;
+
+        img {
+          width: 100%;
+          margin-bottom: 1rem;
+        }
+      }
+    }
+
+    .cta-section {
+      .cta-buttons {
+        flex-direction: column;
+      }
+    }
+  }
+}

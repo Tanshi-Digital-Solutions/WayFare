@@ -1,0 +1,438 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+// Variables
+$primary-color: #3498db;
+$secondary-color: #2c3e50;
+$accent-color: #e74c3c;
+$background-color: #ecf0f1;
+$text-color: #333;
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin section-padding {
+  padding: 4rem 0;
+}
+
+// Global Styles
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.6;
+  color: $text-color;
+  background-color: $background-color;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+// Navbar
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: transparent;
+  transition: background-color 0.3s ease;
+  z-index: 1000;
+
+  &.scrolled {
+    background-color: rgba($secondary-color, 0.9);
+  }
+
+  .navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+  }
+
+  .logo {
+    height: 50px;
+  }
+
+  .nav-menu {
+    display: flex;
+    list-style: none;
+
+    li {
+      margin-left: 2rem;
+
+      a {
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+
+        &:hover {
+          color: $accent-color;
+        }
+      }
+    }
+  }
+
+  .menu-icon {
+    display: none;
+    cursor: pointer;
+    color: #fff;
+  }
+}
+
+// Hero Section
+.hero {
+  height: 100vh;
+  background: linear-gradient(rgba($secondary-color, 0.7), rgba($secondary-color, 0.7)),
+              url('/api/placeholder/1200/800') no-repeat center center/cover;
+  color: #fff;
+  @include flex-center;
+  text-align: center;
+
+  .hero-content {
+    max-width: 800px;
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+    }
+
+    .cta-button {
+      padding: 1rem 2rem;
+      font-size: 1.1rem;
+      background-color: $accent-color;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: darken($accent-color, 10%);
+      }
+    }
+  }
+}
+
+// Benefits Overview
+.benefits-overview {
+  @include section-padding;
+  background-color: #fff;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+
+    .benefit-item {
+      text-align: center;
+
+      img {
+        margin-bottom: 1rem;
+      }
+
+      h3 {
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
+}
+
+// Detailed Benefits
+.detailed-benefits {
+  @include section-padding;
+
+  .benefit-detail {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4rem;
+
+    &.reverse {
+      flex-direction: row-reverse;
+    }
+
+    .benefit-content {
+      flex: 1;
+      padding: 2rem;
+
+      h3 {
+        margin-bottom: 1rem;
+      }
+
+      .learn-more {
+        display: inline-flex;
+        align-items: center;
+        color: $primary-color;
+        text-decoration: none;
+        margin-top: 1rem;
+
+        svg {
+          margin-left: 0.5rem;
+        }
+      }
+    }
+
+    .benefit-image {
+      flex: 1;
+
+      img {
+        width: 100%;
+        border-radius: 10px;
+      }
+    }
+  }
+}
+
+// Why Web3 Section
+.why-web3 {
+  @include section-padding;
+  background-color: $secondary-color;
+  color: #fff;
+  text-align: center;
+
+  h2 {
+    margin-bottom: 1rem;
+  }
+
+  p {
+    margin-bottom: 2rem;
+  }
+
+  .web3-benefits {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+
+    .web3-benefit {
+      h3 {
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
+}
+
+// CTA Section
+.cta-section {
+  @include section-padding;
+  background-color: $primary-color;
+  color: #fff;
+  text-align: center;
+
+  h2 {
+    margin-bottom: 1rem;
+  }
+
+  p {
+    margin-bottom: 2rem;
+  }
+
+  .cta-button {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    background-color: $accent-color;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: darken($accent-color, 10%);
+    }
+  }
+}
+
+// Footer
+.footer {
+    background-color: $secondary-color;
+    color: #fff;
+    padding: 4rem 0 2rem;
+  
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+  
+    .footer-info,
+    .footer-links,
+    .footer-newsletter {
+      flex-basis: calc(33.333% - 2rem);
+    }
+  
+    .logo {
+      height: 45px;
+      margin-bottom: 1rem;
+    }
+  
+    h3 {
+      margin-bottom: 1rem;
+      color: $text-color;
+    }
+  
+    p {
+      color: $text-color;
+    }
+  
+    ul {
+      list-style: none;
+  
+      li {
+        margin-bottom: 0.5rem;
+        color: $text-color;
+  
+        a {
+          color: $text-color;
+          text-decoration: none;
+          transition: color 0.3s ease;
+  
+          &:hover {
+            color: $accent-color;
+          }
+        }
+      }
+    }
+  
+    .footer-newsletter {
+      form {
+        display: flex;
+  
+        input {
+          flex-grow: 1;
+          padding: 0.5rem;
+          border: none;
+          border-radius: 5px 0 0 5px;
+          color: $text-color; 
+        }
+  
+        button {
+          padding: 0.5rem 1rem;
+          background-color: $accent-color;
+          color: #fff;
+          border: none;
+          border-radius: 0 5px 5px 0;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+  
+          &:hover {
+            background-color: darken($accent-color, 10%);
+          }
+        }
+      }
+    }
+  
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 2rem;
+  
+      .social-links {
+        a {
+          color: $text-color;
+          font-size: 1.5rem;
+          margin-left: 1rem;
+          transition: color 0.3s ease;
+  
+          &:hover {
+            color: $accent-color;
+          }
+        }
+      }
+    }
+  }
+  
+  // Responsive Design
+  @media (max-width: 768px) {
+    .navbar {
+      .nav-menu {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        background-color: rgba($secondary-color, 0.9);
+        padding: 1rem 0;
+  
+        &.active {
+          display: flex;
+        }
+  
+        li {
+          margin: 1rem 0;
+        }
+      }
+  
+      .menu-icon {
+        display: flex;
+      }
+    }
+  
+    .hero {
+      .hero-content {
+        h1 {
+          font-size: 2.5rem;
+        }
+      }
+    }
+  
+    .for-users,
+    .for-providers {
+      .features {
+        .feature {
+          flex-basis: 100%;
+        }
+      }
+    }
+  
+    .why-web3 {
+      .web3-benefits {
+        flex-direction: column;
+  
+        .benefit {
+          margin-bottom: 2rem;
+        }
+      }
+    }
+  
+    .footer {
+      .footer-info,
+      .footer-links,
+      .footer-newsletter {
+        flex-basis: 100%;
+        margin-bottom: 2rem;
+      }
+  
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+  
+        .social-links {
+          margin-top: 1rem;
+        }
+      }
+    }
+  }

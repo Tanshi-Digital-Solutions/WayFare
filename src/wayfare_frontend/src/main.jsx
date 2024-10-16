@@ -15,12 +15,17 @@ import Providers from './Providers';
 import AdminLogin from './AdminLogin';
 import AdminDashboard from './AdminDashboard';
 import LinkII from './Users';
+import Landing from './Landing';
+import About from './About';
+import ForUsers from './ForUsers';
+import ForProviders from './ForProviders';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>  {/* Wrap the App component with BrowserRouter */}
       <Routes>
-        <Route path="/" element={<App />} />  
+        <Route path="/login" element={<App />} />  
+        <Route path="/" element={<Landing />} />   
         <Route path="/dashboard" element={<Dashboard />} />  
         <Route path="/ticket/:ticketCode" element={<Ticket />} /> 
         <Route path="/booking" element={<BookingForm />} />  
@@ -33,6 +38,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/link-identity" element={<LinkII />} />
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/for-users" element={<ForUsers />} />
+        <Route path="/for-providers" element={<ForProviders />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,
